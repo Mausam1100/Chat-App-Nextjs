@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                 Int @default(autoincrement()) @id
+  email              String @unique
+  fullName           String 
+  password           String?
+  sentMessages       Message[] @relation("SentMessages")
+  receivedMessages   Message[] @relation("ReceivedMessages")
+}
+
+model Message {
+  id         Int @default(autoincrement()) @id
+  content    String
+  createdAt  DateTime @default(now())
+
+  senderId   Int
+  receiverId Int
+
+  sender     User @relation("SentMessages", fields: [senderId], references: [id])
+  receiver     User @relation("ReceivedMessages", fields: [receiverId], references: [id])
+}
