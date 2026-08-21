@@ -136,3 +136,39 @@ export const googleSignIn = async(req: Request, res: Response) => {
     });
     }
 }
+
+export const searchUser = async(req:Request, res:Response) => {
+    try {
+        const query = req.query.q as string
+
+        const users = await prisma.user.findMany({
+            where: 
+            {
+                OR: [
+                    {
+                        fullName: {
+                            contains: query,
+                            mode: "insensitive"
+                        }
+                    },
+                    {
+                        email: {
+                            contains: query,
+                            mode: "insensitive"
+                        }
+                    }
+                ]
+            },
+            select: {
+                fullName: true,
+                email: true
+            }
+        })
+
+        res.status(200).json({
+            users
+        })
+    } catch (error) {
+        console.log(`Error in searchUser controller: ${error}`)
+    }
+}

@@ -114,4 +114,37 @@ export const googleSignIn = async (req, res) => {
         });
     }
 };
+export const searchUser = async (req, res) => {
+    try {
+        const query = req.query.q;
+        const users = await prisma.user.findMany({
+            where: {
+                OR: [
+                    {
+                        fullName: {
+                            contains: query,
+                            mode: "insensitive"
+                        }
+                    },
+                    {
+                        email: {
+                            contains: query,
+                            mode: "insensitive"
+                        }
+                    }
+                ]
+            },
+            select: {
+                fullName: true,
+                email: true
+            }
+        });
+        res.status(200).json({
+            users
+        });
+    }
+    catch (error) {
+        console.log(`Error in searchUser controller: ${error}`);
+    }
+};
 //# sourceMappingURL=user.controller.js.map
