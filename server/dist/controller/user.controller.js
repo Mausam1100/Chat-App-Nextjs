@@ -1,10 +1,10 @@
 import z from "zod";
 import { prisma } from "../lib/prisma.js";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 const signUpSchema = z.object({
     fullName: z.string().min(3).max(15),
     email: z.email(),
-    password: z.string().min(3).max(25)
+    password: z.string().min(3).max(25),
 });
 const signInSchema = z.object({
     email: z.string().min(1, "Email is required"),
@@ -15,18 +15,18 @@ export const signUp = async (req, res) => {
         const result = signUpSchema.safeParse(req.body);
         if (!result.success) {
             return res.status(400).json({
-                msg: result.error.issues[0]?.message
+                msg: result.error.issues[0]?.message,
             });
         }
         const { fullName, email, password } = result.data;
         const existedUser = await prisma.user.findUnique({
             where: {
-                email
-            }
+                email,
+            },
         });
         if (existedUser) {
             return res.status(400).json({
-                msg: "User with this username already existed!"
+                msg: "User with this username already existed!",
             });
         }
         const hashedPassword = await bcrypt.hash(password, 16);
@@ -34,11 +34,11 @@ export const signUp = async (req, res) => {
             data: {
                 fullName,
                 email,
-                password: hashedPassword
-            }
+                password: hashedPassword,
+            },
         });
         res.status(200).json({
-            msg: "User created successfully!"
+            msg: "User created successfully!",
         });
     }
     catch (error) {
@@ -50,33 +50,30 @@ export const signIn = async (req, res) => {
         const result = signInSchema.safeParse(req.body);
         if (!result.success) {
             return res.status(400).json({
-                msg: result.error.issues[0]?.message
+                msg: result.error.issues[0]?.message,
             });
         }
         const { email, password } = result.data;
         const user = await prisma.user.findUnique({
             where: {
-                email
-            }
+                email,
+            },
         });
         if (!user) {
             return res.status(400).json({
-                msg: "User doesn't exist!"
+                msg: "User doesn't exist!",
             });
         }
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect) {
             return res.status(400).json({
-                msg: "Incorrect Password!"
+                msg: "Incorrect Password!",
             });
         }
         res.status(200).json({
             id: user.id,
             fullName: user.fullName,
-            email: user.email
-        });
-        res.status(200).json({
-            msg: "User logged in successfully!"
+            email: user.email,
         });
     }
     catch (error) {
@@ -85,7 +82,7 @@ export const signIn = async (req, res) => {
 };
 export const googleSignIn = async (req, res) => {
     try {
-        const { name, email } = req.body;
+        const { fullName, email } = req.body;
         if (!email) {
             return res.status(400).json({
                 message: "Email is required",
@@ -99,18 +96,17 @@ export const googleSignIn = async (req, res) => {
         if (!user) {
             user = await prisma.user.create({
                 data: {
-                    fullName: name,
+                    fullName: fullName ?? "",
                     email,
-                    password: null,
                 },
             });
         }
         return res.status(200).json(user);
     }
     catch (error) {
-        console.error(error);
+        console.error("Google sign-in error:", error);
         return res.status(500).json({
-            message: "Something went wrong",
+            message: "Google sign-in failed",
         });
     }
 };
@@ -123,24 +119,25 @@ export const searchUser = async (req, res) => {
                     {
                         fullName: {
                             contains: query,
-                            mode: "insensitive"
-                        }
+                            mode: "insensitive",
+                        },
                     },
                     {
                         email: {
                             contains: query,
-                            mode: "insensitive"
-                        }
-                    }
-                ]
+                            mode: "insensitive",
+                        },
+                    },
+                ],
             },
             select: {
+                id: true,
                 fullName: true,
-                email: true
-            }
+                email: true,
+            },
         });
         res.status(200).json({
-            users
+            users,
         });
     }
     catch (error) {
