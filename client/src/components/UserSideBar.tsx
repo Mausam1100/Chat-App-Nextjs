@@ -1,0 +1,44 @@
+"use client";
+import { useSelectedUser } from "@/store/searchUsers";
+import User1 from "../../public/Pavitr Prabhakar.jpg";
+import Image from "next/image";
+
+interface PropsType {
+  id: number;
+  fullName: string;
+  email: string;
+}
+
+export default function UserSideBar({ fullName, email, id }: PropsType) {
+  const selectedUser = useSelectedUser((state) => state.selectedUser);
+  const setSelectedUser = useSelectedUser((state) => state.setSelectedUser);
+  function handleClick() {
+    setSelectedUser({ id, fullName, email });
+  }
+  return (
+    <>
+      <div
+        onClick={() => handleClick()}
+        className={`flex cursor-pointer items-center border-b border-[#555] py-3 px-5 ${
+          selectedUser?.id === id ? "bg-[#111]" : ""
+        }`}
+      >
+        <div>
+          <Image
+            className="rounded-full"
+            src={User1}
+            alt="user1"
+            height={36}
+            width={36}
+          />
+        </div>
+        <div className="pl-4">
+          <h4 className="text-sm">{fullName}</h4>
+          <p className="text-xs font-extralight">
+            Hey! How are you doing? Where are...
+          </p>
+        </div>
+      </div>
+    </>
+  );
+}

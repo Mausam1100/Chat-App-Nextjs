@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@layer base {
+  h1 {
+    @apply text-3xl font-bold
+  }
+
+  p {
+    @apply text-sm text-[#bdbbbb]
+  }
+}
+
+/* Thin dark scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
