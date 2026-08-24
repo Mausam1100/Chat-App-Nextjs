@@ -7,6 +7,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
+import { toast } from "sonner"
 
 export default function SignUp() {
     const [fullName, setFullName] = useState('')
@@ -22,6 +23,7 @@ export default function SignUp() {
         })
         const user = response.data
         router.push('/auth/signin')
+        toast.success("User registered successfully!")
         console.log(user)
     }
     return (

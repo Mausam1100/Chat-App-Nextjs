@@ -1,22 +1,25 @@
 "use client";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import axios from "axios";
 import ShowUsers from "@/components/ShowUsers";
 import { useSearchUser } from "@/store/searchUsers";
 import { useRef } from "react";
 import LogOutModal from "@/components/LogOutModal";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import DefaultProfilePic from "@/components/DefaultProfilePic";
+import MenuModal from "@/components/navbar/MenuModal";
 
-export default function MainLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function MainLayout({children}: {children: React.ReactNode;}) {
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const searchRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter()
   const [search, setSearch] = useState("");
   const [logOutModal, setLogOutModal] = useState(false);
+  const [menuModal, setMenuModal] = useState(false);
   const { data: session } = useSession();
 
   const searchUsers = useSearchUser((state) => state.searchUsers);
@@ -24,6 +27,26 @@ export default function MainLayout({
 
   const controllerRef = useRef<AbortController | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function handleClick() {
+    setMenuModal(!menuModal)
+  }
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuModal(false);
+      }
+    }
+
+    if (menuModal) {
+      document.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [menuModal]);
 
   function handleSearch(value: string) {
     setSearch(value);
@@ -49,11 +72,14 @@ export default function MainLayout({
               q: value,
             },
             signal: controller.signal,
+            headers: {
+              Authorization: `Bearer ${session?.accessToken}`
+            }
           },
         );
 
         setSearchUsers(response.data.users);
-        console.log(searchUsers);
+        console.log("pppp", response.data.users);
       } catch (error) {
         if (axios.isCancel(error)) {
           return;
@@ -85,11 +111,11 @@ export default function MainLayout({
       {logOutModal && <LogOutModal setLogOutModal={setLogOutModal} />}
       <div className="flex flex-col h-screen">
         <div className="bg-[#161b22] text-white flex items-center justify-between px-10 py-4">
-          <h4 className="text-lg cursor-pointer font-medium">
+          <h4 onClick={() => router.push('/')} className="text-lg cursor-pointer font-medium">
             &lt;chat-app/&gt;
           </h4>
           {session ? (
-            <div className="flex gap-x-5">
+            <div className="flex gap-x-5 items-center">
               <div ref={searchRef} className="flex relative">
                 <input
                   value={search}
@@ -111,12 +137,18 @@ export default function MainLayout({
                   )}
                 </div>
               </div>
-              <button
-                onClick={() => setLogOutModal(true)}
-                className="bg-red-500 text-white cursor-pointer px-3.5 text-sm font-semibold py-1.5 rounded-full"
-              >
-                Log out
-              </button>
+              <div onClick={handleClick} className="group w-9 relative h-9 cursor-pointer z-40 rounded-full">
+                {session?.user?.image ? <Image src={session?.user?.image} fill className="rounded-full object-cover aspect-square" alt="img" />:
+                <DefaultProfilePic size="small" id={session?.user?.id} fullName={session?.user?.name ?? ""} />}
+                <div className="bg-[#555] rounded-full absolute -bottom-1 right-0 p-0.5 flex justify-center items-center">
+                  <ChevronDown className="translate-y-[0.6px] translate-x-[0.2px]" strokeWidth={3} size={11} />
+                </div>
+                <div className="absolute rounded-full inset-0 bg-white/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+
+                {menuModal && <div ref={menuRef} className="absolute top-12 right-0">
+                  <MenuModal id={session?.user?.id} fullName={session?.user?.name ?? ""} imageUrl={session?.user?.image ?? null} setMenuModal={setMenuModal} setLogOutModal={setLogOutModal} />
+                </div>}
+              </div>
             </div>
           ) : (
             <div className="space-x-4">

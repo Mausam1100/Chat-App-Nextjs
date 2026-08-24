@@ -1,11 +1,16 @@
 import { CircleAlert } from "lucide-react";
 import { signOut } from "next-auth/react";
+import { toast } from "sonner";
 
 interface Props {
   setLogOutModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function LogOutModal({setLogOutModal}: Props) {
+    function handleLogOut() {
+        signOut()
+        toast.success("Logged out successfully!")
+    }
     return (
         <>
         <div onClick={() => setLogOutModal(false)} className="fixed inset-0 z-50 flex justify-center items-center backdrop-blur-xs bg-black/40">
@@ -19,7 +24,7 @@ export default function LogOutModal({setLogOutModal}: Props) {
                 </div>
                 <div className="flex pb-3 justify-end items-center gap-x-4">
                     <button onClick={() => setLogOutModal(false)} className="hover:bg-[#999] text-white cursor-pointer px-3 py-1 rounded-lg">Cancel</button>
-                    <button onClick={() => signOut()} className="hover:bg-red-100 px-3 py-1 cursor-pointer rounded-lg text-red-500">Logout</button>
+                    <button onClick={handleLogOut} className="hover:bg-red-100 px-3 py-1 cursor-pointer rounded-lg text-red-500">Logout</button>
                 </div>
             </div>
         </div>

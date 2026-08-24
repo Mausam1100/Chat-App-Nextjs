@@ -1,6 +1,7 @@
 import z from "zod";
 import { prisma } from "../lib/prisma.js";
 import bcrypt from "bcrypt";
+import cloudinary from "../config/cloudinary.js";
 const signUpSchema = z.object({
     fullName: z.string().min(3).max(15),
     email: z.email(),
@@ -64,6 +65,11 @@ export const signIn = async (req, res) => {
                 msg: "User doesn't exist!",
             });
         }
+        if (!user.password) {
+            return res.status(400).json({
+                msg: "This account was created with Google. Please sign in with Google.",
+            });
+        }
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect) {
             return res.status(400).json({
@@ -74,6 +80,8 @@ export const signIn = async (req, res) => {
             id: user.id,
             fullName: user.fullName,
             email: user.email,
+            imageUrl: user.imageUrl,
+            createdAt: user.createdAt
         });
     }
     catch (error) {
@@ -82,7 +90,7 @@ export const signIn = async (req, res) => {
 };
 export const googleSignIn = async (req, res) => {
     try {
-        const { fullName, email } = req.body;
+        const { fullName, email, imageUrl } = req.body;
         if (!email) {
             return res.status(400).json({
                 message: "Email is required",
@@ -98,6 +106,7 @@ export const googleSignIn = async (req, res) => {
                 data: {
                     fullName: fullName ?? "",
                     email,
+                    imageUrl: imageUrl
                 },
             });
         }
@@ -113,8 +122,12 @@ export const googleSignIn = async (req, res) => {
 export const searchUser = async (req, res) => {
     try {
         const query = req.query.q;
+        const userId = Number(req.userId);
         const users = await prisma.user.findMany({
             where: {
+                id: {
+                    not: userId
+                },
                 OR: [
                     {
                         fullName: {
@@ -134,6 +147,7 @@ export const searchUser = async (req, res) => {
                 id: true,
                 fullName: true,
                 email: true,
+                imageUrl: true
             },
         });
         res.status(200).json({
@@ -142,6 +156,59 @@ export const searchUser = async (req, res) => {
     }
     catch (error) {
         console.log(`Error in searchUser controller: ${error}`);
+    }
+};
+export const editProfile = async (req, res) => {
+    try {
+        console.log("Edit Profile controller");
+        const { fullName } = req.body;
+        const userId = Number(req.userId);
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId,
+            },
+        });
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+            });
+        }
+        let profilePic = user.imageUrl;
+        if (req.file) {
+            const result = await new Promise((resolve, reject) => {
+                const uploadStream = cloudinary.uploader.upload_stream({
+                    folder: "profile-images",
+                }, (error, result) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    else {
+                        resolve(result);
+                    }
+                });
+                uploadStream.end(req.file?.buffer);
+            });
+            profilePic = result.secure_url;
+        }
+        const updatedUser = await prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                fullName,
+                imageUrl: profilePic
+            },
+        });
+        return res.status(200).json({
+            message: "Profile updated successfully",
+            user: updatedUser,
+        });
+    }
+    catch (error) {
+        console.error("Error updating profile:", error);
+        return res.status(500).json({
+            message: "Failed to update profile",
+        });
     }
 };
 //# sourceMappingURL=user.controller.js.map

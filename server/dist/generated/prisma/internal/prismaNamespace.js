@@ -84,7 +84,9 @@ export const UserScalarFieldEnum = {
     id: 'id',
     email: 'email',
     fullName: 'fullName',
-    password: 'password'
+    password: 'password',
+    imageUrl: 'imageUrl',
+    createdAt: 'createdAt'
 };
 export const MessageScalarFieldEnum = {
     id: 'id',

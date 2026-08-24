@@ -12,6 +12,8 @@ model User {
   email              String @unique
   fullName           String 
   password           String?
+  imageUrl           String?
+  createdAt          DateTime @default(now())
   sentMessages       Message[] @relation("SentMessages")
   receivedMessages   Message[] @relation("ReceivedMessages")
 }

@@ -2,18 +2,23 @@
 import { useChatUsers, useSelectedUser } from "@/store/searchUsers";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 interface Props {
   setShowDeleteChat: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-async function deleteChat(userId: number, otherUserId: number) {
+async function deleteChat(userId: number, otherUserId: number, token: string) {
     await axios.delete('http://localhost:4000/api/v1/delete-chat', {
         params: {
             userId: userId,
             otherUserId: otherUserId
+        },
+        headers: {
+          Authorization: `Bearer ${token}`
         }
     })
+    toast.success("Chat deleted successfully!")
 }
 
 export default function DeleteModal({setShowDeleteChat}: Props) {
@@ -24,7 +29,7 @@ export default function DeleteModal({setShowDeleteChat}: Props) {
     async function handleClick() {
         console.log('Delete chat!')
         if (!selectedUser || !session?.user?.id) return;
-        await deleteChat(session?.user?.id, selectedUser?.id)
+        await deleteChat(session?.user?.id, selectedUser?.id, session?.accessToken)
         setSelectedUser(null)
         removeUser(selectedUser.id)
     }

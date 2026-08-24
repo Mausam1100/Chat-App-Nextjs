@@ -79,6 +79,7 @@ export const getFriends = async (req, res) => {
                 id: true,
                 fullName: true,
                 email: true,
+                imageUrl: true
             },
         });
         return res.status(200).json({

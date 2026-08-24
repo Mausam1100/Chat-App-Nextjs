@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Providers from "./provider";
+import { Toaster } from "sonner";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body className={`${poppins.className} min-h-full flex flex-col`}>
         <Providers>
           {children}
+          <Toaster />
         </Providers>
       </body>
     </html>

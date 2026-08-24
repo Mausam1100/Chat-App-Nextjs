@@ -2,6 +2,7 @@ import axios from "axios";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import jwt from "jsonwebtoken";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -23,25 +24,38 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const response = await axios.post(
-          "http://localhost:4000/api/v1/sign-in",
-          {
-            email,
-            password,
-          },
-        );
-
-        const user = response.data;
-        return {
-          id: user.id,
-          name: user.fullName,
-          email: user.email,
-        };
+        try {
+          const response = await axios.post(
+            "http://localhost:4000/api/v1/sign-in",
+            {
+              email,
+              password,
+            },
+          );
+  
+          const user = response.data;
+          return {
+            id: user.id,
+            name: user.fullName,
+            email: user.email,
+            image: user.imageUrl,
+            createdAt: user.createdAt
+          };
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+          const msg = error.response?.data?.msg || "Something went wrong";
+          throw new Error(msg);
+        }
       },
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          prompt: "select_account"
+        }
+      }
     }),
   ],
   pages: {
@@ -59,16 +73,35 @@ export const authOptions: NextAuthOptions = {
           {
             fullName: user.name,
             email: user.email,
+            imageUrl: user.image
           },
         );
-
+        console.log("goo", user)
         user.id = String(response.data.id);
+        user.image = response.data.imageUrl;
+        user.createdAt = response.data.createdAt
       }
       return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.image = user.image;
+        token.createdAt = user.createdAt;
+
+        token.backendAccessToken = jwt.sign(
+          {
+            userId: user.id
+          },
+          process.env.BACKEND_JWT_SECRET!,
+        )
+      }
+
+      if(trigger === "update" && session) {
+        token.name = session.name;
+        token.image = session.image;
       }
 
       return token;
@@ -76,6 +109,11 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       session.user.id = Number(token.id);
+      session.user.name = token.name;
+      session.user.email = token.email;
+      session.user.image = token.image;
+      session.user.createdAt = token.createdAt;
+      session.accessToken = token.backendAccessToken!
       return session;
     },
   },

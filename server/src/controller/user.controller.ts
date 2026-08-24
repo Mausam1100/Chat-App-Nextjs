@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import z from "zod";
 import { prisma } from "../lib/prisma.js";
 import bcrypt from "bcrypt";
+import cloudinary from "../config/cloudinary.js";
 
 const signUpSchema = z.object({
   fullName: z.string().min(3).max(15),
@@ -81,6 +82,12 @@ export const signIn = async (req: Request, res: Response) => {
       });
     }
 
+    if (!user.password) {
+      return res.status(400).json({
+      msg: "This account was created with Google. Please sign in with Google.",
+      });
+    }
+
     const isPasswordCorrect = await bcrypt.compare(password, user.password!);
     if (!isPasswordCorrect) {
       return res.status(400).json({
@@ -92,6 +99,8 @@ export const signIn = async (req: Request, res: Response) => {
       id: user.id,
       fullName: user.fullName,
       email: user.email,
+      imageUrl: user.imageUrl,
+      createdAt: user.createdAt
     });
   } catch (error) {
     console.log(`Error in signIn controller: ${error}`);
@@ -100,7 +109,7 @@ export const signIn = async (req: Request, res: Response) => {
 
 export const googleSignIn = async (req: Request, res: Response) => {
   try {
-    const { fullName, email } = req.body;
+    const { fullName, email, imageUrl } = req.body;
 
     if (!email) {
       return res.status(400).json({
@@ -119,6 +128,7 @@ export const googleSignIn = async (req: Request, res: Response) => {
         data: {
           fullName: fullName ?? "",
           email,
+          imageUrl: imageUrl
         },
       });
     }
@@ -136,9 +146,13 @@ export const googleSignIn = async (req: Request, res: Response) => {
 export const searchUser = async (req: Request, res: Response) => {
   try {
     const query = req.query.q as string;
+    const userId = Number(req.userId)
 
     const users = await prisma.user.findMany({
       where: {
+        id: {
+          not: userId
+        },
         OR: [
           {
             fullName: {
@@ -158,6 +172,7 @@ export const searchUser = async (req: Request, res: Response) => {
         id: true,
         fullName: true,
         email: true,
+        imageUrl: true
       },
     });
 
@@ -166,5 +181,69 @@ export const searchUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.log(`Error in searchUser controller: ${error}`);
+  }
+};
+
+export const editProfile = async (req: Request, res: Response) => {
+  try {
+    console.log("Edit Profile controller")
+    const { fullName } = req.body;
+    const userId = Number(req.userId);
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    let profilePic = user.imageUrl;
+
+    if (req.file) {
+      const result = await new Promise<any>((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: "profile-images",
+          },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
+            }
+          }
+        );
+
+        uploadStream.end(req.file?.buffer);
+      });
+
+      profilePic = result.secure_url
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        fullName,
+        imageUrl: profilePic
+      },
+    });
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+
+    return res.status(500).json({
+      message: "Failed to update profile",
+    });
   }
 };

@@ -2,18 +2,20 @@
 import { useSelectedUser } from "@/store/searchUsers";
 import User1 from "../../public/Pavitr Prabhakar.jpg";
 import Image from "next/image";
+import DefaultProfilePic from "./DefaultProfilePic";
 
 interface PropsType {
   id: number;
   fullName: string;
   email: string;
+  imageUrl: string | null
 }
 
-export default function UserSideBar({ fullName, email, id }: PropsType) {
+export default function UserSideBar({ fullName, email, id, imageUrl }: PropsType) {
   const selectedUser = useSelectedUser((state) => state.selectedUser);
   const setSelectedUser = useSelectedUser((state) => state.setSelectedUser);
   function handleClick() {
-    setSelectedUser({ id, fullName, email });
+    setSelectedUser({ id, fullName, email, imageUrl });
   }
   return (
     <>
@@ -23,14 +25,17 @@ export default function UserSideBar({ fullName, email, id }: PropsType) {
           selectedUser?.id === id ? "bg-[#111]" : ""
         }`}
       >
-        <div>
-          <Image
+        <div className="w-9 h-9">
+          {imageUrl? (<Image
             className="rounded-full"
-            src={User1}
+            src={imageUrl}
             alt="user1"
             height={36}
             width={36}
-          />
+          />): 
+          (
+            <DefaultProfilePic id={id} fullName={fullName}  size="verySmall" />
+          )}
         </div>
         <div className="pl-4">
           <h4 className="text-sm">{fullName}</h4>

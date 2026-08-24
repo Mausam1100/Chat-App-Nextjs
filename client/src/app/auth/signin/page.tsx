@@ -5,18 +5,31 @@ import Image from "next/image"
 import { useState } from "react"
 import Link from "next/link"
 import { Eye, EyeOff } from "lucide-react"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 export default function SignIn() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [seePassword, setSeePassword] = useState(false)
+    const router = useRouter()
 
-    function handleLogin() {
-        signIn('credentials', {
+    async function handleLogin() {
+        const result = await signIn('credentials', {
             email,
             password,
-            callbackUrl: '/'
+            redirect: false
         })
+
+        if(result?.error) {
+            toast.error(result.error)
+            return
+        }
+
+        if(result?.ok) {
+            router.push('/')
+            toast.success("Logged in successfully!")
+        }
     }
     return (
         <>
@@ -45,7 +58,7 @@ export default function SignIn() {
                         </div>
                     </div>
                     <div>
-                        <button onClick={() => handleLogin()} className="bg-[#555] cursor-pointer mb-4 text-center px-6 mt-2 w-full py-3 rounded-lg">Login</button>
+                        <button onClick={handleLogin} className="bg-[#555] cursor-pointer mb-4 text-center px-6 mt-2 w-full py-3 rounded-lg">Login</button>
                     </div>
 
                     <div className="grid grid-cols-[1fr_auto_1fr] items-center">

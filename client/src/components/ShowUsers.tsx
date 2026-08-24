@@ -4,7 +4,8 @@ import ShowUsersSearch from "./ShowUsersSearch"
 interface User {
     id: number,
     fullName: string,
-    email: string
+    email: string,
+    imageUrl: string | null
 }
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 
 export default function ShowUsers({setSearch}: Props) {
     const searchUsers = useSearchUser((state) => state.searchUsers)
+    console.log(searchUsers)
     const setSearchUsers = useSearchUser((state) => state.setSearchUsers)
     const setSelectedUser = useSelectedUser((state) => state.setSelectedUser)
 
@@ -26,7 +28,7 @@ export default function ShowUsers({setSearch}: Props) {
             <div className="bg-[#555] rounded-xl">
                 {searchUsers.map((user) => (
                     <div onClick={() => handleClick(user)} key={user.email}>
-                        <ShowUsersSearch fullName={user.fullName} email={user.email} />
+                        <ShowUsersSearch fullName={user.fullName} id={user.id} email={user.email} imageUrl={user.imageUrl}/>
                     </div>
                 ))}
             </div>

@@ -3,7 +3,8 @@ import { create } from "zustand";
 type User = {
     id: number,
     fullName: string,
-    email: string
+    email: string,
+    imageUrl: string | null
 }
 
 type SearchUser = {

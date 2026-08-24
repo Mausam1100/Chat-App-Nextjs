@@ -96,6 +96,7 @@ export const getFriends = async (req: Request, res: Response) => {
         id: true,
         fullName: true,
         email: true,
+        imageUrl: true
       },
     });
 

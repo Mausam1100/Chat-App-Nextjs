@@ -381,9 +381,6 @@ export type MessageUncheckedUpdateManyWithoutReceiverNestedInput = {
     updateMany?: Prisma.MessageUpdateManyWithWhereWithoutReceiverInput | Prisma.MessageUpdateManyWithWhereWithoutReceiverInput[];
     deleteMany?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[];
 };
-export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string;
-};
 export type MessageCreateWithoutSenderInput = {
     content: string;
     createdAt?: Date | string;

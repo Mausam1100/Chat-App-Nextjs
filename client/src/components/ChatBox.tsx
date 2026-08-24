@@ -1,5 +1,5 @@
 "use client";
-import { EllipsisVertical, Phone, Send, Video } from "lucide-react";
+import { EllipsisVertical, FaceSlightlySmiling, Phone, Send, Video } from "lucide-react";
 import User1 from "../../public/Pavitr Prabhakar.jpg";
 import Image from "next/image";
 import MessageBox from "./MessageBox";
@@ -10,6 +10,8 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import Option from "./Option";
 import DeleteModal from "./DeleteModal";
+import DefaultProfilePic from "./DefaultProfilePic";
+import EmojiPicker, {Theme} from "emoji-picker-react";
 
 interface MessageArrayType {
   id: number;
@@ -19,9 +21,11 @@ interface MessageArrayType {
 }
 
 export function ChatBox() {
-  const [showDeleteChat, setShowDeleteChat] = useState(false)
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showDeleteChat, setShowDeleteChat] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const optionRef = useRef<HTMLDivElement | null>(null);
+  const emojiRef = useRef<HTMLDivElement | null>(null);
   const selectedUser = useSelectedUser((state) => state.selectedUser);
   const addOrMoveUser = useChatUsers((state) => state.addOrMoveUser);
   const [showOption, setShowOption] = useState(false);
@@ -65,6 +69,22 @@ export function ChatBox() {
   }, [showOption]);
 
   useEffect(() => {
+    function handleClickOutside2(e: MouseEvent) {
+      if (emojiRef.current && !emojiRef.current.contains(e.target as Node)) {
+        setShowEmojiPicker(false);
+      }
+    }
+
+    if (showEmojiPicker) {
+      document.addEventListener("click", handleClickOutside2);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside2);
+    };
+  }, [showEmojiPicker]);
+
+  useEffect(() => {
     socket.on("receive-msg", (data) => {
       console.log(data);
       setMessageArray((prev) => [...prev, data]);
@@ -106,6 +126,9 @@ export function ChatBox() {
               senderId: session.user.id,
               receiverId: selectedUser.id,
             },
+            headers: {
+              Authorization: `Bearer ${session?.accessToken}`,
+            },
           },
         );
 
@@ -124,13 +147,23 @@ export function ChatBox() {
       <div className="bg-[#161b22] overflow-y-auto flex-1 rounded-xl h-full flex flex-col justify-between">
         <div className="border-b bg-[#161b22] sticky top-0 border-[#555] px-6 py-4 flex items-center justify-between">
           <div className="flex items-center">
-            <Image
-              src={User1}
-              width={45}
-              alt="User"
-              height={45}
-              className="rounded-full"
-            />
+            <div className="w-11 h-11">
+              {selectedUser?.imageUrl ? (
+                <Image
+                  src={selectedUser.imageUrl}
+                  width={45}
+                  alt="User"
+                  height={45}
+                  className="rounded-full"
+                />
+              ) : (
+                <DefaultProfilePic
+                  id={selectedUser?.id ?? 0}
+                  fullName={selectedUser?.fullName ?? ""}
+                  size="small"
+                />
+              )}
+            </div>
             <div className="px-4">
               <h3 className="font-medium">{selectedUser?.fullName}</h3>
               <p className="text-xs">{selectedUser?.email}</p>
@@ -178,23 +211,43 @@ export function ChatBox() {
         </div>
 
         <div className="px-5 py-3 bg-[#161b22] sticky bottom-0 flex items-center gap-x-4 justify-between">
-          <input
-            value={msg}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && msg.trim()) {
-                handleSendMessage();
-              }
-            }}
-            onChange={(e) => setMsg(e.target.value)}
-            type="text"
-            placeholder="Type a message here..."
-            className="w-full rounded-3xl bg-[#555] px-4 outline-none py-2"
-          />
-          <div className="p-2 bg-blue-500 rounded-full flex justify-center items-center">
+          <div className="relative flex-1">
             <button
-              onClick={() => handleSendMessage()}
-              className="cursor-pointer"
+              type="button"
+              onClick={() => setShowEmojiPicker((prev) => !prev)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xl cursor-pointer"
             >
+              <FaceSlightlySmiling />
+            </button>
+
+            {showEmojiPicker && (
+              <div ref={emojiRef} className="absolute bottom-12 right-0 ">
+                <EmojiPicker
+                  theme={Theme.DARK}
+                  onEmojiClick={(emojiData) => {
+                    setMsg((prev) => prev + emojiData.emoji);
+                    // setShowEmojiPicker(false);
+                  }}
+                />
+              </div>
+            )}
+
+            <input
+              value={msg}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && msg.trim()) {
+                  handleSendMessage();
+                }
+              }}
+              onChange={(e) => setMsg(e.target.value)}
+              type="text"
+              placeholder="Type a message here..."
+              className="w-full rounded-3xl bg-[#555] pl-7 pr-13 outline-none py-2"
+            />
+          </div>
+
+          <div className="p-2 bg-blue-500 rounded-full flex justify-center items-center">
+            <button onClick={handleSendMessage} className="cursor-pointer">
               <Send
                 className="-translate-x-0.5 translate-y-0.5"
                 strokeWidth={1.5}

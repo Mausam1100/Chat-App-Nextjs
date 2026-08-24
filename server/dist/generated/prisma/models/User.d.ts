@@ -23,18 +23,24 @@ export type UserMinAggregateOutputType = {
     email: string | null;
     fullName: string | null;
     password: string | null;
+    imageUrl: string | null;
+    createdAt: Date | null;
 };
 export type UserMaxAggregateOutputType = {
     id: number | null;
     email: string | null;
     fullName: string | null;
     password: string | null;
+    imageUrl: string | null;
+    createdAt: Date | null;
 };
 export type UserCountAggregateOutputType = {
     id: number;
     email: number;
     fullName: number;
     password: number;
+    imageUrl: number;
+    createdAt: number;
     _all: number;
 };
 export type UserAvgAggregateInputType = {
@@ -48,18 +54,24 @@ export type UserMinAggregateInputType = {
     email?: true;
     fullName?: true;
     password?: true;
+    imageUrl?: true;
+    createdAt?: true;
 };
 export type UserMaxAggregateInputType = {
     id?: true;
     email?: true;
     fullName?: true;
     password?: true;
+    imageUrl?: true;
+    createdAt?: true;
 };
 export type UserCountAggregateInputType = {
     id?: true;
     email?: true;
     fullName?: true;
     password?: true;
+    imageUrl?: true;
+    createdAt?: true;
     _all?: true;
 };
 export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -143,6 +155,8 @@ export type UserGroupByOutputType = {
     email: string;
     fullName: string;
     password: string | null;
+    imageUrl: string | null;
+    createdAt: Date;
     _count: UserCountAggregateOutputType | null;
     _avg: UserAvgAggregateOutputType | null;
     _sum: UserSumAggregateOutputType | null;
@@ -160,6 +174,8 @@ export type UserWhereInput = {
     email?: Prisma.StringFilter<"User"> | string;
     fullName?: Prisma.StringFilter<"User"> | string;
     password?: Prisma.StringNullableFilter<"User"> | string | null;
+    imageUrl?: Prisma.StringNullableFilter<"User"> | string | null;
+    createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     sentMessages?: Prisma.MessageListRelationFilter;
     receivedMessages?: Prisma.MessageListRelationFilter;
 };
@@ -168,6 +184,8 @@ export type UserOrderByWithRelationInput = {
     email?: Prisma.SortOrder;
     fullName?: Prisma.SortOrder;
     password?: Prisma.SortOrderInput | Prisma.SortOrder;
+    imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
     sentMessages?: Prisma.MessageOrderByRelationAggregateInput;
     receivedMessages?: Prisma.MessageOrderByRelationAggregateInput;
 };
@@ -179,6 +197,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
     fullName?: Prisma.StringFilter<"User"> | string;
     password?: Prisma.StringNullableFilter<"User"> | string | null;
+    imageUrl?: Prisma.StringNullableFilter<"User"> | string | null;
+    createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     sentMessages?: Prisma.MessageListRelationFilter;
     receivedMessages?: Prisma.MessageListRelationFilter;
 }, "id" | "email">;
@@ -187,6 +207,8 @@ export type UserOrderByWithAggregationInput = {
     email?: Prisma.SortOrder;
     fullName?: Prisma.SortOrder;
     password?: Prisma.SortOrderInput | Prisma.SortOrder;
+    imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
     _count?: Prisma.UserCountOrderByAggregateInput;
     _avg?: Prisma.UserAvgOrderByAggregateInput;
     _max?: Prisma.UserMaxOrderByAggregateInput;
@@ -201,11 +223,15 @@ export type UserScalarWhereWithAggregatesInput = {
     email?: Prisma.StringWithAggregatesFilter<"User"> | string;
     fullName?: Prisma.StringWithAggregatesFilter<"User"> | string;
     password?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
+    imageUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
+    createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
 };
 export type UserCreateInput = {
     email: string;
     fullName: string;
     password?: string | null;
+    imageUrl?: string | null;
+    createdAt?: Date | string;
     sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput;
     receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput;
 };
@@ -214,6 +240,8 @@ export type UserUncheckedCreateInput = {
     email: string;
     fullName: string;
     password?: string | null;
+    imageUrl?: string | null;
+    createdAt?: Date | string;
     sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput;
     receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput;
 };
@@ -221,6 +249,8 @@ export type UserUpdateInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     fullName?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput;
     receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput;
 };
@@ -229,6 +259,8 @@ export type UserUncheckedUpdateInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     fullName?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput;
     receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput;
 };
@@ -237,23 +269,31 @@ export type UserCreateManyInput = {
     email: string;
     fullName: string;
     password?: string | null;
+    imageUrl?: string | null;
+    createdAt?: Date | string;
 };
 export type UserUpdateManyMutationInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     fullName?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type UserUncheckedUpdateManyInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     fullName?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type UserCountOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     email?: Prisma.SortOrder;
     fullName?: Prisma.SortOrder;
     password?: Prisma.SortOrder;
+    imageUrl?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
 };
 export type UserAvgOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -263,12 +303,16 @@ export type UserMaxOrderByAggregateInput = {
     email?: Prisma.SortOrder;
     fullName?: Prisma.SortOrder;
     password?: Prisma.SortOrder;
+    imageUrl?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
 };
 export type UserMinOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     email?: Prisma.SortOrder;
     fullName?: Prisma.SortOrder;
     password?: Prisma.SortOrder;
+    imageUrl?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
 };
 export type UserSumOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -282,6 +326,9 @@ export type StringFieldUpdateOperationsInput = {
 };
 export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null;
+};
+export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string;
 };
 export type IntFieldUpdateOperationsInput = {
     set?: number;
@@ -318,6 +365,8 @@ export type UserCreateWithoutSentMessagesInput = {
     email: string;
     fullName: string;
     password?: string | null;
+    imageUrl?: string | null;
+    createdAt?: Date | string;
     receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput;
 };
 export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -325,6 +374,8 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
     email: string;
     fullName: string;
     password?: string | null;
+    imageUrl?: string | null;
+    createdAt?: Date | string;
     receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput;
 };
 export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -335,6 +386,8 @@ export type UserCreateWithoutReceivedMessagesInput = {
     email: string;
     fullName: string;
     password?: string | null;
+    imageUrl?: string | null;
+    createdAt?: Date | string;
     sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput;
 };
 export type UserUncheckedCreateWithoutReceivedMessagesInput = {
@@ -342,6 +395,8 @@ export type UserUncheckedCreateWithoutReceivedMessagesInput = {
     email: string;
     fullName: string;
     password?: string | null;
+    imageUrl?: string | null;
+    createdAt?: Date | string;
     sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput;
 };
 export type UserCreateOrConnectWithoutReceivedMessagesInput = {
@@ -361,6 +416,8 @@ export type UserUpdateWithoutSentMessagesInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     fullName?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput;
 };
 export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -368,6 +425,8 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     fullName?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput;
 };
 export type UserUpsertWithoutReceivedMessagesInput = {
@@ -383,6 +442,8 @@ export type UserUpdateWithoutReceivedMessagesInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     fullName?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput;
 };
 export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
@@ -390,6 +451,8 @@ export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     fullName?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput;
 };
 /**
@@ -429,6 +492,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     email?: boolean;
     fullName?: boolean;
     password?: boolean;
+    imageUrl?: boolean;
+    createdAt?: boolean;
     sentMessages?: boolean | Prisma.User$sentMessagesArgs<ExtArgs>;
     receivedMessages?: boolean | Prisma.User$receivedMessagesArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
@@ -438,20 +503,26 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     email?: boolean;
     fullName?: boolean;
     password?: boolean;
+    imageUrl?: boolean;
+    createdAt?: boolean;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     email?: boolean;
     fullName?: boolean;
     password?: boolean;
+    imageUrl?: boolean;
+    createdAt?: boolean;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectScalar = {
     id?: boolean;
     email?: boolean;
     fullName?: boolean;
     password?: boolean;
+    imageUrl?: boolean;
+    createdAt?: boolean;
 };
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "fullName" | "password", ExtArgs["result"]["user"]>;
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "fullName" | "password" | "imageUrl" | "createdAt", ExtArgs["result"]["user"]>;
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     sentMessages?: boolean | Prisma.User$sentMessagesArgs<ExtArgs>;
     receivedMessages?: boolean | Prisma.User$receivedMessagesArgs<ExtArgs>;
@@ -470,6 +541,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         email: string;
         fullName: string;
         password: string | null;
+        imageUrl: string | null;
+        createdAt: Date;
     }, ExtArgs["result"]["user"]>;
     composites: {};
 };
@@ -830,6 +903,8 @@ export interface UserFieldRefs {
     readonly email: Prisma.FieldRef<"User", 'String'>;
     readonly fullName: Prisma.FieldRef<"User", 'String'>;
     readonly password: Prisma.FieldRef<"User", 'String'>;
+    readonly imageUrl: Prisma.FieldRef<"User", 'String'>;
+    readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>;
 }
 /**
  * User findUnique
