@@ -101,7 +101,7 @@ export default function MainLayout({children}: {children: React.ReactNode;}) {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, []);
+  }, [setSearchUsers]);
 
   useEffect(() => {
     console.log(searchUsers);
