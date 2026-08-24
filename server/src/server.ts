@@ -25,6 +25,12 @@ io.on('connection', (socket) => {
         const sender = await prisma.user.findUnique({
             where: {
                 id: senderId
+            },
+            select: {
+                id: true,
+                fullName: true,
+                email: true,
+                imageUrl: true
             }
         })
 

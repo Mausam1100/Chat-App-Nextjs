@@ -103,20 +103,19 @@ export function ChatBox() {
       }
     };
     socket.on("receive-msg", handleReceiveMessage);
-    
+
     return () => {
       socket.off("receive-msg", handleReceiveMessage);
     };
   }, [addOrMoveUser, session?.user?.id]);
 
   useEffect(() => {
-    if (status !== "authenticated") return;
+    if (status !== "authenticated" || !session?.user.id) return;
 
     const handleConnect = () => {
-      if (roomId) {
-        socket.emit("join-room", roomId);
-      }
+      socket.emit("join-user", session.user.id);
     };
+
     socket.on("connect", handleConnect);
     socket.connect();
 
@@ -124,7 +123,7 @@ export function ChatBox() {
       socket.off("connect", handleConnect);
       socket.disconnect();
     };
-  }, [status, roomId]);
+  }, [status, session?.user.id]);
 
   useEffect(() => {
     if (!session?.user.id || !selectedUser?.id) return;
