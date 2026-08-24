@@ -119,7 +119,7 @@ export function ChatBox() {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/api/v1/fetch-messages",
+          "https://api-chat-app-eky0.onrender.com/api/v1/fetch-messages",
           {
             params: {
               senderId: session.user.id,

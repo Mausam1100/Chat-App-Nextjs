@@ -41,7 +41,7 @@ export default function EditProfileModal({
         formData.append("image", selectedFile);
       }
       const response = await axios.put(
-        `http://localhost:4000/api/v1/profile`,
+        `https://api-chat-app-eky0.onrender.com/api/v1/profile`,
         formData,
         {
           headers: {

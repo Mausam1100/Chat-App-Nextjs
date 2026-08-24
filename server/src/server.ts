@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 4001
 const server = createServer(app)
 export const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: 'https://chat-app-two-ochre-87.vercel.app',
         credentials: true
     }
 })

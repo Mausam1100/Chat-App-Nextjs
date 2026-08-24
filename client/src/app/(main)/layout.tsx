@@ -66,7 +66,7 @@ export default function MainLayout({children}: {children: React.ReactNode;}) {
 
       try {
         const response = await axios.get(
-          "http://localhost:4000/api/v1/users/search",
+          "https://api-chat-app-eky0.onrender.com/api/v1/users/search",
           {
             params: {
               q: value,
