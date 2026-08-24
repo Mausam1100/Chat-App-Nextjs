@@ -1,5 +1,11 @@
 "use client";
-import { EllipsisVertical, FaceSlightlySmiling, Phone, Send, Video } from "lucide-react";
+import {
+  EllipsisVertical,
+  FaceSlightlySmiling,
+  Phone,
+  Send,
+  Video,
+} from "lucide-react";
 import Image from "next/image";
 import MessageBox from "./MessageBox";
 import { useChatUsers, useSelectedUser } from "@/store/searchUsers";
@@ -10,13 +16,19 @@ import axios from "axios";
 import Option from "./Option";
 import DeleteModal from "./DeleteModal";
 import DefaultProfilePic from "./DefaultProfilePic";
-import EmojiPicker, {Theme} from "emoji-picker-react";
+import EmojiPicker, { Theme } from "emoji-picker-react";
 
 interface MessageArrayType {
   id: number;
   content: string;
   senderId: number;
   receiverId: number;
+  sender: {
+    id: number;
+    fullName: string;
+    email: string;
+    imageUrl: string | null;
+  };
 }
 
 export function ChatBox() {
@@ -84,14 +96,18 @@ export function ChatBox() {
   }, [showEmojiPicker]);
 
   useEffect(() => {
-    socket.on("receive-msg", (data) => {
+    const handleReceiveMessage = (data: MessageArrayType) => {
       setMessageArray((prev) => [...prev, data]);
-    });
-
-    return () => {
-      socket.off("receive-msg");
+      if (data.senderId !== session?.user.id && data.sender) {
+        addOrMoveUser(data.sender);
+      }
     };
-  }, []);
+    socket.on("receive-msg", handleReceiveMessage);
+    
+    return () => {
+      socket.off("receive-msg", handleReceiveMessage);
+    };
+  }, [addOrMoveUser, session?.user?.id]);
 
   useEffect(() => {
     if (status !== "authenticated") return;

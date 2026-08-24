@@ -3,6 +3,7 @@ import app from "./app.js";
 import 'dotenv/config'
 import { Server } from "socket.io";
 import { saveNewMessages } from "./controller/message.controller.js";
+import { prisma } from "./lib/prisma.js";
 
 const PORT = process.env.PORT || 4001
 
@@ -21,12 +22,19 @@ io.on('connection', (socket) => {
     })
 
     socket.on('chat', async ({roomId, msg, receiverId, senderId}) => {
+        const sender = await prisma.user.findUnique({
+            where: {
+                id: senderId
+            }
+        })
+
         io.to(roomId).emit('receive-msg', {
             content: msg,
             senderId, 
-            receiverId
+            receiverId,
+            sender
         })
-        const message = await saveNewMessages({
+        await saveNewMessages({
             content: msg,
             senderId,
             receiverId
