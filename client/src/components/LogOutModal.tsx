@@ -1,5 +1,6 @@
 import { CircleAlert } from "lucide-react";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 interface Props {
@@ -7,8 +8,10 @@ interface Props {
 }
 
 export default function LogOutModal({setLogOutModal}: Props) {
+    const router = useRouter()
     function handleLogOut() {
         signOut()
+        router.push('https://chat-app-two-ochre-87.vercel.app/auth/signin')
         toast.success("Logged out successfully!")
     }
     return (

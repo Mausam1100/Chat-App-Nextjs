@@ -69,7 +69,7 @@ export default function SignIn() {
 
                     <div>
                         <button onClick={() => signIn('google', {
-                            callbackUrl: '/'
+                            callbackUrl: 'https://chat-app-two-ochre-87.vercel.app'
                         })} className="bg-white cursor-pointer relative flex items-center justify-center text-black mb-4 text-center px-6 mt-2 w-full py-4 rounded-lg">
                             <Image className="absolute left-3" src="https://authjs.dev/img/providers/google.svg" width={22} height={22} alt="Google" />
                             <h4 className="font-medium">Sign in with Google</h4>
