@@ -15,15 +15,12 @@ export const io = new Server(server, {
 })
 
 io.on('connection', (socket) => {
-    console.log(`User is connecting: ${socket.id}`)
 
     socket.on('join-room', (roomId) => {
-        console.log(roomId)
         socket.join(roomId)
     })
 
     socket.on('chat', async ({roomId, msg, receiverId, senderId}) => {
-        console.log('msg is send')
         io.to(roomId).emit('receive-msg', {
             content: msg,
             senderId, 

@@ -85,7 +85,6 @@ export function ChatBox() {
 
   useEffect(() => {
     socket.on("receive-msg", (data) => {
-      console.log(data);
       setMessageArray((prev) => [...prev, data]);
     });
 
@@ -98,10 +97,8 @@ export function ChatBox() {
     if (status !== "authenticated") return;
 
     const handleConnect = () => {
-      console.log("connected:", socket.id);
       if (roomId) {
         socket.emit("join-room", roomId);
-        console.log("Room joined: ", roomId);
       }
     };
     socket.on("connect", handleConnect);
@@ -132,7 +129,6 @@ export function ChatBox() {
         );
 
         setMessageArray(response.data.messages);
-        console.log(response.data.messages);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }

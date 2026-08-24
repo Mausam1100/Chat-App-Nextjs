@@ -5,7 +5,6 @@ import ChatBoxEmpty from "./ChatBoxEmpty"
 
 export default function ChatBoxParent() {
     const selectedUser = useSelectedUser((state) => state.selectedUser)
-    console.log("selected User:", selectedUser)
     return (
         <>
         <div className="h-full">

@@ -17,14 +17,11 @@ export default function SignUp() {
     const router = useRouter()
 
     async function handleSignUp() {
-        console.log('jkajsdkf')
-        const response = await axios.post('http://localhost:4000/api/v1/sign-up', {
+        await axios.post('https://api-chat-app-eky0.onrender.com/api/v1/sign-up', {
             fullName, email, password
         })
-        const user = response.data
         router.push('/auth/signin')
         toast.success("User registered successfully!")
-        console.log(user)
     }
     return (
         <>

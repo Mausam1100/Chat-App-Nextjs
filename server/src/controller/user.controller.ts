@@ -186,7 +186,6 @@ export const searchUser = async (req: Request, res: Response) => {
 
 export const editProfile = async (req: Request, res: Response) => {
   try {
-    console.log("Edit Profile controller")
     const { fullName } = req.body;
     const userId = Number(req.userId);
 

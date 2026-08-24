@@ -14,7 +14,6 @@ interface Props {
 
 export default function ShowUsers({setSearch}: Props) {
     const searchUsers = useSearchUser((state) => state.searchUsers)
-    console.log(searchUsers)
     const setSearchUsers = useSearchUser((state) => state.setSearchUsers)
     const setSelectedUser = useSelectedUser((state) => state.setSelectedUser)
 

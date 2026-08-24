@@ -5,7 +5,6 @@ import { getServerSession } from "next-auth";
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
-  console.log(session?.user)
   return (
     <>
       <div className="h-full max-w-[1600px] mx-auto w-full min-h-0 grid grid-cols-5 text-white bg-[#2d3542] p-3">

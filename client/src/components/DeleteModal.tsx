@@ -27,7 +27,6 @@ export default function DeleteModal({setShowDeleteChat}: Props) {
     const selectedUser = useSelectedUser((state) => state.selectedUser)
     const {data: session} = useSession()
     async function handleClick() {
-        console.log('Delete chat!')
         if (!selectedUser || !session?.user?.id) return;
         await deleteChat(session?.user?.id, selectedUser?.id, session?.accessToken)
         setSelectedUser(null)

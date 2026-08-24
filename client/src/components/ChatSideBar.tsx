@@ -14,7 +14,6 @@ export default function ChatSideBar() {
 
   useEffect(() => {
     if (!session?.user?.id) return;
-    console.log(`Token: ${session?.accessToken}`)
     async function fetchFriends() {
       try {
         const response = await axios.get(
@@ -30,7 +29,6 @@ export default function ChatSideBar() {
         );
 
         setUsers(response.data.users);
-        console.log(response.data.users)
       } catch (error) {
         console.error("Error fetching friends:", error);
       }

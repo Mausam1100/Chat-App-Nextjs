@@ -76,7 +76,6 @@ export const authOptions: NextAuthOptions = {
             imageUrl: user.image
           },
         );
-        console.log("goo", user)
         user.id = String(response.data.id);
         user.image = response.data.imageUrl;
         user.createdAt = response.data.createdAt

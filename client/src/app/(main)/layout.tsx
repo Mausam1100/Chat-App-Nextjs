@@ -79,7 +79,6 @@ export default function MainLayout({children}: {children: React.ReactNode;}) {
         );
 
         setSearchUsers(response.data.users);
-        console.log("pppp", response.data.users);
       } catch (error) {
         if (axios.isCancel(error)) {
           return;
@@ -102,10 +101,6 @@ export default function MainLayout({children}: {children: React.ReactNode;}) {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [setSearchUsers]);
-
-  useEffect(() => {
-    console.log(searchUsers);
-  }, [searchUsers]);
   return (
     <>
       {logOutModal && <LogOutModal setLogOutModal={setLogOutModal} />}

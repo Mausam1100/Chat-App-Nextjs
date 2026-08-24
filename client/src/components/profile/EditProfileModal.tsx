@@ -27,7 +27,6 @@ export default function EditProfileModal({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const hasChange = fullName !== session?.user?.name || selectedFile !== null;
-  console.log(hasChange);
 
   function handleClick() {
     fileInputRef.current?.click();
@@ -49,7 +48,6 @@ export default function EditProfileModal({
           },
         },
       );
-      console.log(response.data);
 
       await update({
         name: response.data.user.fullName,
