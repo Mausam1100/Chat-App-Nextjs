@@ -133,7 +133,7 @@ export default function MainLayout({children}: {children: React.ReactNode;}) {
                 </div>
               </div>
               <div onClick={handleClick} className="group w-9 relative h-9 cursor-pointer z-40 rounded-full">
-                {session?.user?.image ? <img src={session?.user?.image} className="rounded-full object-cover aspect-square" alt="img" />:
+                {session?.user?.image ? <Image src={session?.user?.image} fill className="rounded-full object-cover aspect-square" alt="img" />:
                 <DefaultProfilePic size="small" id={session?.user?.id} fullName={session?.user?.name ?? ""} />}
                 <div className="bg-[#555] rounded-full absolute -bottom-1 right-0 p-0.5 flex justify-center items-center">
                   <ChevronDown className="translate-y-[0.6px] translate-x-[0.2px]" strokeWidth={3} size={11} />
