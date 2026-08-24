@@ -17,12 +17,6 @@ interface MessageArrayType {
   content: string;
   senderId: number;
   receiverId: number;
-  sender?: {
-    id: number;
-    fullName: string;
-    email: string;
-    imageUrl: string | null;
-  };
 }
 
 export function ChatBox() {
@@ -42,16 +36,16 @@ export function ChatBox() {
     .join("-");
 
   function handleSendMessage() {
-  if (!msg.trim() || !selectedUser?.id || !session?.user.id) return;
-
-  socket.emit("chat", {
-    msg,
-    receiverId: selectedUser.id,
-    senderId: session.user.id,
-  });
-
-  setMsg("");
-}
+    if (!msg.trim()) return;
+    addOrMoveUser(selectedUser!);
+    socket.emit("chat", {
+      roomId,
+      msg,
+      receiverId: selectedUser?.id,
+      senderId: session?.user?.id,
+    });
+    setMsg("");
+  }
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -90,37 +84,31 @@ export function ChatBox() {
   }, [showEmojiPicker]);
 
   useEffect(() => {
-  const handleReceiveMessage = (data: MessageArrayType) => {
-    setMessageArray((prev) => [...prev, data]);
+    socket.on("receive-msg", (data) => {
+      setMessageArray((prev) => [...prev, data]);
+    });
 
-    // Message came from another user
-    if (data.senderId !== session?.user.id && data.sender) {
-      addOrMoveUser(data.sender);
-    }
-  };
-
-  socket.on("receive-msg", handleReceiveMessage);
-
-  return () => {
-    socket.off("receive-msg", handleReceiveMessage);
-  };
-}, [addOrMoveUser, session?.user.id]);
+    return () => {
+      socket.off("receive-msg");
+    };
+  }, []);
 
   useEffect(() => {
-  if (status !== "authenticated" || !session?.user.id) return;
+    if (status !== "authenticated") return;
 
-  const handleConnect = () => {
-    socket.emit("join-user", session.user.id);
-  };
+    const handleConnect = () => {
+      if (roomId) {
+        socket.emit("join-room", roomId);
+      }
+    };
+    socket.on("connect", handleConnect);
+    socket.connect();
 
-  socket.on("connect", handleConnect);
-  socket.connect();
-
-  return () => {
-    socket.off("connect", handleConnect);
-    socket.disconnect();
-  };
-}, [status, session?.user.id]);
+    return () => {
+      socket.off("connect", handleConnect);
+      socket.disconnect();
+    };
+  }, [status, roomId]);
 
   useEffect(() => {
     if (!session?.user.id || !selectedUser?.id) return;

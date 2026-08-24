@@ -1,61 +1,39 @@
 import { createServer } from "http";
 import app from "./app.js";
-import "dotenv/config";
+import 'dotenv/config'
 import { Server } from "socket.io";
 import { saveNewMessages } from "./controller/message.controller.js";
-import { prisma } from "./lib/prisma.js";
 
-const PORT = process.env.PORT || 4001;
+const PORT = process.env.PORT || 4001
 
-const server = createServer(app);
-
+const server = createServer(app)
 export const io = new Server(server, {
-  cors: {
-    origin: "https://chat-app-two-ochre-87.vercel.app",
-    credentials: true,
-  },
-});
+    cors: {
+        origin: 'https://chat-app-two-ochre-87.vercel.app',
+        credentials: true
+    }
+})
 
-io.on("connection", (socket) => {
+io.on('connection', (socket) => {
 
-  // Each user joins their own personal room
-  socket.on("join-user", (userId) => {
-    socket.join(`user-${userId}`);
-  });
+    socket.on('join-room', (roomId) => {
+        socket.join(roomId)
+    })
 
-  // Send message
-  socket.on("chat", async ({ msg, receiverId, senderId }) => {
-
-    // Get sender information
-    const sender = await prisma.user.findUnique({
-      where: {
-        id: senderId,
-      },
-      select: {
-        id: true,
-        fullName: true,
-        email: true,
-        imageUrl: true,
-      },
-    });
-
-    // Send message to receiver's personal room
-    io.to(`user-${receiverId}`).emit("receive-msg", {
-      content: msg,
-      senderId,
-      receiverId,
-      sender,
-    });
-
-    // Save message in database
-    await saveNewMessages({
-      content: msg,
-      senderId,
-      receiverId,
-    });
-  });
-});
+    socket.on('chat', async ({roomId, msg, receiverId, senderId}) => {
+        io.to(roomId).emit('receive-msg', {
+            content: msg,
+            senderId, 
+            receiverId
+        })
+        await saveNewMessages({
+            content: msg,
+            senderId,
+            receiverId
+        })
+    })
+})
 
 server.listen(PORT, () => {
-  console.log(`Server is running at PORT: ${PORT}`);
-});
+    console.log(`Server is running at PORT: ${PORT}`)
+})
