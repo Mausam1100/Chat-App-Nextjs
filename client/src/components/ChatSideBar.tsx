@@ -37,7 +37,7 @@ export default function ChatSideBar() {
     }
 
     fetchFriends();
-  }, [session?.user?.id, setUsers]);
+  }, [session?.user?.id, setUsers, session?.accessToken]);
 
   return (
     <div className="h-full min-h-0 bg-[#161b22] rounded-xl flex flex-col">

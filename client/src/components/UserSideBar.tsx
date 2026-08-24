@@ -1,6 +1,5 @@
 "use client";
 import { useSelectedUser } from "@/store/searchUsers";
-import User1 from "../../public/Pavitr Prabhakar.jpg";
 import Image from "next/image";
 import DefaultProfilePic from "./DefaultProfilePic";
 
