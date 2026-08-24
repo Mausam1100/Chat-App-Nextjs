@@ -1,5 +1,4 @@
 import Image from "next/image"
-import User from '../../../public/Pavitr Prabhakar.jpg'
 import { CircleUserRound, LogOut } from "lucide-react"
 import { useRouter } from "next/navigation";
 import DefaultProfilePic from "../DefaultProfilePic";

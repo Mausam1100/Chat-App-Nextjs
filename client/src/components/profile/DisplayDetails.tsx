@@ -1,4 +1,4 @@
-import { Calendar, ChevronRight, Lock, Mail, User } from "lucide-react";
+import { Calendar, Mail, User } from "lucide-react";
 
 interface PropsType {
     fullName: string,

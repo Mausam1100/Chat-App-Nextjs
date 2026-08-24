@@ -1,6 +1,5 @@
 "use client";
 import { EllipsisVertical, FaceSlightlySmiling, Phone, Send, Video } from "lucide-react";
-import User1 from "../../public/Pavitr Prabhakar.jpg";
 import Image from "next/image";
 import MessageBox from "./MessageBox";
 import { useChatUsers, useSelectedUser } from "@/store/searchUsers";
@@ -140,7 +139,7 @@ export function ChatBox() {
     };
 
     fetchMessages();
-  }, [selectedUser?.id, session?.user.id]);
+  }, [selectedUser?.id, session?.user.id, session?.accessToken]);
   return (
     <>
       {showDeleteChat && <DeleteModal setShowDeleteChat={setShowDeleteChat} />}

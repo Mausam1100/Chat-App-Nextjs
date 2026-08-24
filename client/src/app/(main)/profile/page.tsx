@@ -8,7 +8,7 @@ export default async function Home() {
   console.log(session?.user)
   return (
     <>
-      <div className="h-full min-h-0 w-screen grid grid-cols-5 text-white bg-[#2d3542] p-3">
+      <div className="h-full max-w-[1600px] mx-auto w-full min-h-0 grid grid-cols-5 text-white bg-[#2d3542] p-3">
         <div className="p-3 min-h-0 col-span-2">
           <Profile id={session?.user?.id ?? null} imageUrl={session?.user?.image ?? null} fullName={session?.user?.name ?? "User"} email={session?.user?.email ?? "Email"} />
         </div>

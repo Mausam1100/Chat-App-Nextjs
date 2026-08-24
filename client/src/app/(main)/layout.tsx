@@ -109,8 +109,8 @@ export default function MainLayout({children}: {children: React.ReactNode;}) {
   return (
     <>
       {logOutModal && <LogOutModal setLogOutModal={setLogOutModal} />}
-      <div className="flex flex-col h-screen">
-        <div className="bg-[#161b22] text-white flex items-center justify-between px-10 py-4">
+      <div className="flex flex-col h-screen bg-[#161b22]">
+        <div className="bg-[#161b22] max-w-[1600px] mx-auto w-full text-white flex items-center justify-between px-8 py-4">
           <h4 onClick={() => router.push('/')} className="text-lg cursor-pointer font-medium">
             &lt;chat-app/&gt;
           </h4>

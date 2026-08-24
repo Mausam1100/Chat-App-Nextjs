@@ -15,7 +15,7 @@ interface PropsType {
 
 export default function EditProfileModal({
   setShowEditProfile,
-  imageUrl,
+  
 }: PropsType) {
   const router = useRouter()
   const { data: session, update } = useSession();
