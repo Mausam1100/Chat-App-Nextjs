@@ -160,7 +160,6 @@ export const searchUser = async (req, res) => {
 };
 export const editProfile = async (req, res) => {
     try {
-        console.log("Edit Profile controller");
         const { fullName } = req.body;
         const userId = Number(req.userId);
         const user = await prisma.user.findUnique({

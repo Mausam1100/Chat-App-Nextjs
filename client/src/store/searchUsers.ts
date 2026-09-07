@@ -7,6 +7,31 @@ type User = {
     imageUrl: string | null
 }
 
+type UnreadCountStore = {
+  unreadCounts: Record<number, number>;
+  incrementUnread: (senderId: number) => void;
+  clearUnread: (senderId: number) => void;
+};
+
+interface MessageType {
+  content: string,
+  senderId: number,
+  receiverId: number,
+  sender?: {
+    id: number,
+    fullName: string,
+    email: string,
+    imageUrl: string
+  }
+}
+
+type MessageStore = {
+  messages: MessageType[],
+  addMessage: (message: MessageType) => void,
+  setMessages: (message: MessageType[] ) => void,
+  clearMessages: () => void
+}
+
 type SearchUser = {
     searchUsers: User[],
     setSearchUsers: (users: User[]) => void;
@@ -52,4 +77,43 @@ export const useChatUsers = create<ChatUserStore>((set) => ({
       users: state.users.filter((u) => u.id !== userId)
     }))
   }
+}));
+
+export const useMessageStore = create<MessageStore>((set) => ({
+  messages: [],
+  addMessage: (message) => {
+    set((state) => ({
+      messages: [...state.messages, message]
+    }))
+  },
+  setMessages: (messages) => {
+    set({
+      messages
+    })
+  },
+  clearMessages: () => {
+    set({
+      messages: []
+    })
+  }
+}))
+
+export const useUnreadCountStore = create<UnreadCountStore>((set) => ({
+  unreadCounts: {},
+
+  incrementUnread: (senderId) =>
+    set((state) => ({
+      unreadCounts: {
+        ...state.unreadCounts,
+        [senderId]: (state.unreadCounts[senderId] || 0) + 1,
+      },
+    })),
+
+  clearUnread: (senderId) =>
+    set((state) => ({
+      unreadCounts: {
+        ...state.unreadCounts,
+        [senderId]: 0,
+      },
+    })),
 }));

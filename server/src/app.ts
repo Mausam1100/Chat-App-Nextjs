@@ -6,7 +6,7 @@ const app = express()
 
 app.use(express.json())
 app.use(cors({
-    origin: 'https://chat-app-two-ochre-87.vercel.app'
+    origin: ['https://chat-app-two-ochre-87.vercel.app', 'http://localhost:3000']
 }))
 app.use('/api/v1', userRouter)
 

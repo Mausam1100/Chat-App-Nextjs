@@ -1,8 +1,18 @@
 "use client";
-import { EllipsisVertical, FaceSlightlySmiling, Phone, Send, Video } from "lucide-react";
+import {
+  EllipsisVertical,
+  FaceSlightlySmiling,
+  Phone,
+  Send,
+  Video,
+} from "lucide-react";
 import Image from "next/image";
 import MessageBox from "./MessageBox";
-import { useChatUsers, useSelectedUser } from "@/store/searchUsers";
+import {
+  useChatUsers,
+  useMessageStore,
+  useSelectedUser,
+} from "@/store/searchUsers";
 import { useEffect, useRef, useState } from "react";
 import { socket } from "@/lib/socket";
 import { useSession } from "next-auth/react";
@@ -10,14 +20,7 @@ import axios from "axios";
 import Option from "./Option";
 import DeleteModal from "./DeleteModal";
 import DefaultProfilePic from "./DefaultProfilePic";
-import EmojiPicker, {Theme} from "emoji-picker-react";
-
-interface MessageArrayType {
-  id: number;
-  content: string;
-  senderId: number;
-  receiverId: number;
-}
+import EmojiPicker, { Theme } from "emoji-picker-react";
 
 export function ChatBox() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -29,17 +32,25 @@ export function ChatBox() {
   const addOrMoveUser = useChatUsers((state) => state.addOrMoveUser);
   const [showOption, setShowOption] = useState(false);
   const [msg, setMsg] = useState("");
-  const [messageArray, setMessageArray] = useState<MessageArrayType[]>([]);
-  const { data: session, status } = useSession();
-  const roomId = [session?.user.id, selectedUser?.id]
-    .sort((a, b) => a! - b!)
-    .join("-");
+  const setMessages = useMessageStore((state) => state.setMessages);
+  const messages = useMessageStore((state) => state.messages);
+  const addMessage = useMessageStore((state) => state.addMessage);
+  const { data: session } = useSession();
 
   function handleSendMessage() {
     if (!msg.trim()) return;
     addOrMoveUser(selectedUser!);
+    const senderId = session?.user?.id;
+    const receiverId = selectedUser?.id;
+
+    if (!senderId || !receiverId) return;
+
+    addMessage({
+      content: msg,
+      senderId,
+      receiverId,
+    });
     socket.emit("chat", {
-      roomId,
       msg,
       receiverId: selectedUser?.id,
       senderId: session?.user?.id,
@@ -49,7 +60,7 @@ export function ChatBox() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messageArray]);
+  }, [messages]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -84,39 +95,12 @@ export function ChatBox() {
   }, [showEmojiPicker]);
 
   useEffect(() => {
-    socket.on("receive-msg", (data) => {
-      setMessageArray((prev) => [...prev, data]);
-    });
-
-    return () => {
-      socket.off("receive-msg");
-    };
-  }, []);
-
-  useEffect(() => {
-    if (status !== "authenticated") return;
-
-    const handleConnect = () => {
-      if (roomId) {
-        socket.emit("join-room", roomId);
-      }
-    };
-    socket.on("connect", handleConnect);
-    socket.connect();
-
-    return () => {
-      socket.off("connect", handleConnect);
-      socket.disconnect();
-    };
-  }, [status, roomId]);
-
-  useEffect(() => {
     if (!session?.user.id || !selectedUser?.id) return;
 
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
-          "https://api-chat-app-eky0.onrender.com/api/v1/fetch-messages",
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/fetch-messages`,
           {
             params: {
               senderId: session.user.id,
@@ -128,14 +112,14 @@ export function ChatBox() {
           },
         );
 
-        setMessageArray(response.data.messages);
+        setMessages(response.data.messages);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
     };
 
     fetchMessages();
-  }, [selectedUser?.id, session?.user.id, session?.accessToken]);
+  }, [selectedUser?.id, session?.user.id, session?.accessToken, setMessages]);
   return (
     <>
       {showDeleteChat && <DeleteModal setShowDeleteChat={setShowDeleteChat} />}
@@ -194,7 +178,7 @@ export function ChatBox() {
 
         <div className="flex-1 px-8 py-4">
           <div>
-            {messageArray.map((data, index) => (
+            {messages.map((data, index) => (
               <MessageBox
                 key={index}
                 msg={data.content}

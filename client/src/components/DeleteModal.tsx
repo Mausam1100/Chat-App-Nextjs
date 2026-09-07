@@ -9,7 +9,7 @@ interface Props {
 }
 
 async function deleteChat(userId: number, otherUserId: number, token: string) {
-    await axios.delete('https://api-chat-app-eky0.onrender.com/api/v1/delete-chat', {
+    await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/delete-chat`, {
         params: {
             userId: userId,
             otherUserId: otherUserId

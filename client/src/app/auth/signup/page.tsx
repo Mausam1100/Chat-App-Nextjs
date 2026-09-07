@@ -17,7 +17,7 @@ export default function SignUp() {
     const router = useRouter()
 
     async function handleSignUp() {
-        await axios.post('https://api-chat-app-eky0.onrender.com/api/v1/sign-up', {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/sign-up`, {
             fullName, email, password
         })
         router.push('/auth/signin')

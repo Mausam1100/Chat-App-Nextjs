@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
 
         try {
           const response = await axios.post(
-            "https://api-chat-app-eky0.onrender.com/api/v1/sign-in",
+            `${process.env.NEXT_PUBLIC_API_URL}/api/v1/sign-in`,
             {
               email,
               password,
@@ -69,7 +69,7 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account }) {
       if (account?.provider === "google") {
         const response = await axios.post(
-          "https://api-chat-app-eky0.onrender.com/api/v1/google-sign-in",
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/google-sign-in`,
           {
             fullName: user.name,
             email: user.email,

@@ -17,7 +17,7 @@ export default function ChatSideBar() {
     async function fetchFriends() {
       try {
         const response = await axios.get(
-          "https://api-chat-app-eky0.onrender.com/api/v1/fetch-friends",
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/fetch-friends`,
           {
             params: {
               userId: session?.user?.id,
