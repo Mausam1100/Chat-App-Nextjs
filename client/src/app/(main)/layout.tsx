@@ -55,35 +55,50 @@ export default function MainLayout({
   const incrementUnread = useUnreadCountStore((state) => state.incrementUnread);
 
   const addOrMoveUser = useChatUsers((state) => state.addOrMoveUser);
-  const updateLatestMessage = useChatUsers((state) => state.updateLatestMessage);
+  const updateLatestMessage = useChatUsers(
+    (state) => state.updateLatestMessage,
+  );
 
   function handleClick() {
     setMenuModal(!menuModal);
   }
 
   function handleIncomingMessage(data: MessageType) {
-  const myId = Number(session?.user?.id);
+    const myId = Number(session?.user?.id);
 
-  const isFromMe = data.senderId === myId;
+    const isFromMe = data.senderId === myId;
 
-  const isActive =
-    data.senderId === selectedUser?.id ||
-    data.receiverId === selectedUser?.id;
+    const isActive =
+      data.senderId === selectedUser?.id ||
+      data.receiverId === selectedUser?.id;
 
-  if (!isFromMe) {
-    updateLatestMessage(data.senderId, {
-      content: data.content,
-      senderId: data.senderId,
-      receiverId: data.receiverId
-    });
+    if (!isFromMe) {
+      const message = {
+        content: data.content,
+        senderId: data.senderId,
+        receiverId: data.receiverId,
+      };
+
+      const existingUser = useChatUsers
+        .getState()
+        .users.some((user) => user.id === data.senderId);
+
+      if (existingUser) {
+        updateLatestMessage(data.senderId, message);
+      } else {
+        addOrMoveUser({
+          ...data.sender,
+          latestMessage: message,
+        });
+      }
+    }
+
+    if (isActive && !isFromMe) {
+      addMessages(data);
+    } else if (!isFromMe) {
+      incrementUnread(data.senderId);
+    }
   }
-
-  if (isActive && !isFromMe) {
-    addMessages(data);
-  } else if (!isFromMe) {
-    incrementUnread(data.senderId);
-  }
-}
 
   useEffect(() => {
     if (!session?.user?.id) return;
