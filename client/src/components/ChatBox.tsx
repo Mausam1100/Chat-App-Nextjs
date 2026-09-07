@@ -12,6 +12,7 @@ import {
   useChatUsers,
   useMessageStore,
   useSelectedUser,
+  useUnreadCountStore,
 } from "@/store/searchUsers";
 import { useEffect, useRef, useState } from "react";
 import { socket } from "@/lib/socket";
@@ -35,7 +36,9 @@ export function ChatBox() {
   const setMessages = useMessageStore((state) => state.setMessages);
   const messages = useMessageStore((state) => state.messages);
   const addMessage = useMessageStore((state) => state.addMessage);
+  const clearUnread = useUnreadCountStore((state) => state.clearUnread);
   const { data: session } = useSession();
+  const updateLatestMessage = useChatUsers((state) => state.updateLatestMessage);
 
   function handleSendMessage() {
     if (!msg.trim()) return;
@@ -50,6 +53,11 @@ export function ChatBox() {
       senderId,
       receiverId,
     });
+    updateLatestMessage(selectedUser!.id, {
+      content: msg,
+      senderId,
+      receiverId,
+    })
     socket.emit("chat", {
       msg,
       receiverId: selectedUser?.id,
@@ -111,8 +119,8 @@ export function ChatBox() {
             },
           },
         );
-
         setMessages(response.data.messages);
+        clearUnread(selectedUser.id);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }

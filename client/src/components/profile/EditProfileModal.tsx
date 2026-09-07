@@ -13,16 +13,14 @@ interface PropsType {
   imageUrl: string | null;
 }
 
-export default function EditProfileModal({
-  setShowEditProfile,
-  
-}: PropsType) {
-  const router = useRouter()
+export default function EditProfileModal({ setShowEditProfile }: PropsType) {
+  const router = useRouter();
   const { data: session, update } = useSession();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fullName, setFullName] = useState(session?.user?.name);
   const [email] = useState(session?.user?.email);
   const [preview, setPreview] = useState("");
+  const [editLoading, setEditLoading] = useState(false);
   const [date] = useState(session?.user?.createdAt);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -39,6 +37,7 @@ export default function EditProfileModal({
       if (selectedFile) {
         formData.append("image", selectedFile);
       }
+      setEditLoading(true);
       const response = await axios.put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile`,
         formData,
@@ -48,14 +47,14 @@ export default function EditProfileModal({
           },
         },
       );
-
+      setEditLoading(false);
       await update({
         name: response.data.user.fullName,
-        image: response.data.user.imageUrl
-      })
+        image: response.data.user.imageUrl,
+      });
       setShowEditProfile(false);
-      toast.success("Save changes successfully!")
-      router.refresh()
+      toast.success("Save changes successfully!");
+      router.refresh();
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -179,15 +178,17 @@ export default function EditProfileModal({
                 Cancel
               </button>
               <button
-                disabled={!hasChange}
+                disabled={!hasChange || editLoading}
                 onClick={handleSaveChanges}
                 className={`px-4 py-2 rounded-lg text-xs font-medium ${
-                  hasChange
-                    ? "bg-red-600 hover:bg-red-400 cursor-pointer"
-                    : "bg-[#333] text-[#777] cursor-not-allowed"
+                  editLoading
+                    ? "bg-gray-600 text-gray-300 cursor-not-allowed"
+                    : hasChange
+                      ? "bg-red-600 hover:bg-red-400 cursor-pointer"
+                      : "bg-[#333] text-[#777] cursor-not-allowed"
                 }`}
               >
-                Save Changes
+                {editLoading ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </div>

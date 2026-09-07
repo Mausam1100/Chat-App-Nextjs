@@ -55,29 +55,35 @@ export default function MainLayout({
   const incrementUnread = useUnreadCountStore((state) => state.incrementUnread);
 
   const addOrMoveUser = useChatUsers((state) => state.addOrMoveUser);
+  const updateLatestMessage = useChatUsers((state) => state.updateLatestMessage);
 
   function handleClick() {
     setMenuModal(!menuModal);
   }
 
   function handleIncomingMessage(data: MessageType) {
-    const isFromMe = data.senderId === session?.user?.id;
+  const myId = Number(session?.user?.id);
 
-    const isActive =
-      data.senderId === selectedUser?.id ||
-      data.receiverId === selectedUser?.id;
-      console.log(selectedUser?.id)
+  const isFromMe = data.senderId === myId;
 
-    if (isActive && !isFromMe) {
-      addMessages(data);
-    } else if (!isFromMe) {
-      incrementUnread(data.senderId);
-    }
+  const isActive =
+    data.senderId === selectedUser?.id ||
+    data.receiverId === selectedUser?.id;
 
-    if (!isFromMe) {
-      addOrMoveUser(data.sender);
-    }
+  if (!isFromMe) {
+    updateLatestMessage(data.senderId, {
+      content: data.content,
+      senderId: data.senderId,
+      receiverId: data.receiverId
+    });
   }
+
+  if (isActive && !isFromMe) {
+    addMessages(data);
+  } else if (!isFromMe) {
+    incrementUnread(data.senderId);
+  }
+}
 
   useEffect(() => {
     if (!session?.user?.id) return;

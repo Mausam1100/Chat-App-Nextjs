@@ -50,7 +50,6 @@ export const signUp = async (req: Request, res: Response) => {
         password: hashedPassword,
       },
     });
-
     res.status(200).json({
       msg: "User created successfully!",
     });

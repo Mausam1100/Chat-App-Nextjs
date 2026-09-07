@@ -1,10 +1,17 @@
 import { create } from "zustand";
 
+type LatestMessage = {  
+  content: string;
+  receiverId: number;
+  senderId: number;
+};
+
 type User = {
     id: number,
     fullName: string,
     email: string,
-    imageUrl: string | null
+    imageUrl: string | null,
+    latestMessage?: LatestMessage | null
 }
 
 type UnreadCountStore = {
@@ -46,7 +53,11 @@ interface ChatUserStore {
   users: User[];
   setUsers: (users: User[]) => void;
   addOrMoveUser: (user: User) => void;
-  removeUser: (userId: number) => void
+  removeUser: (userId: number) => void;
+  updateLatestMessage: (
+    userId: number,
+    message: LatestMessage
+  ) => void;
 }
 
 export const useSearchUser = create<SearchUser>((set) => ({
@@ -76,7 +87,26 @@ export const useChatUsers = create<ChatUserStore>((set) => ({
     set((state) => ({
       users: state.users.filter((u) => u.id !== userId)
     }))
-  }
+  },
+  updateLatestMessage: (userId, message) => {
+  set((state) => {
+    const user = state.users.find((u) => u.id === userId);
+
+    if (!user) return state;
+
+    const updatedUser = {
+      ...user,
+      latestMessage: message,
+    };
+
+    return {
+      users: [
+        updatedUser,
+        ...state.users.filter((u) => u.id !== userId),
+      ],
+    };
+  });
+},
 }));
 
 export const useMessageStore = create<MessageStore>((set) => ({
@@ -117,3 +147,4 @@ export const useUnreadCountStore = create<UnreadCountStore>((set) => ({
       },
     })),
 }));
+

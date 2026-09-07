@@ -1,20 +1,36 @@
 "use client";
-import { useSelectedUser } from "@/store/searchUsers";
+import { useChatUsers, useSelectedUser, useUnreadCountStore } from "@/store/searchUsers";
 import Image from "next/image";
 import DefaultProfilePic from "./DefaultProfilePic";
+
+interface LatestMessage {
+  content: string;
+  receiverId: number;
+  senderId: number;
+}
 
 interface PropsType {
   id: number;
   fullName: string;
   email: string;
-  imageUrl: string | null
+  imageUrl: string | null;
+  latestMessage?: LatestMessage | null;
 }
 
-export default function UserSideBar({ fullName, email, id, imageUrl }: PropsType) {
+export default function UserSideBar({
+  fullName,
+  email,
+  id,
+  imageUrl,
+  latestMessage
+}: PropsType) {
+  const unreadCounts = useUnreadCountStore((state) => state.unreadCounts);
   const selectedUser = useSelectedUser((state) => state.selectedUser);
   const setSelectedUser = useSelectedUser((state) => state.setSelectedUser);
+  const users = useChatUsers((state) => state.users);
+  console.log("users in sidebar", users);
   function handleClick() {
-    setSelectedUser({ id, fullName, email, imageUrl });
+    setSelectedUser({ id, fullName, email, imageUrl })
   }
   return (
     <>
@@ -25,22 +41,32 @@ export default function UserSideBar({ fullName, email, id, imageUrl }: PropsType
         }`}
       >
         <div className="w-9 h-9">
-          {imageUrl? (<Image
-            className="rounded-full"
-            src={imageUrl}
-            alt="user1"
-            height={36}
-            width={36}
-          />): 
-          (
-            <DefaultProfilePic id={id} fullName={fullName}  size="verySmall" />
+          {imageUrl ? (
+            <Image
+              className="rounded-full aspect-square object-cover"
+              src={imageUrl}
+              alt="user1"
+              height={36}
+              width={36}
+            />
+          ) : (
+            <DefaultProfilePic id={id} fullName={fullName} size="verySmall" />
           )}
         </div>
-        <div className="pl-4">
+        <div className="pl-4 w-full">
           <h4 className="text-sm">{fullName}</h4>
-          <p className="text-xs font-extralight">
-            Hey! How are you doing? Where are...
-          </p>
+          <div className="flex items-center gap-x-2 justify-between w-full">
+            <p className="text-xs font-extralight">
+              {latestMessage?.content ? latestMessage.content : "No messages yet"}
+            </p>
+            <div
+              className={`w-5 aspect-square rounded-full bg-blue-400 flex items-center text-xs justify-center ${
+                (unreadCounts[id] || 0) <= 0 ? "hidden" : ""
+              }`}
+            >
+              {unreadCounts[id] || 0}
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -1,16 +1,21 @@
+"use client";
 import { CircleAlert } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface Props {
   setLogOutModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function LogOutModal({setLogOutModal}: Props) {
+    const [logOutLoading, setLogOutLoading] = useState(false)
     const router = useRouter()
-    function handleLogOut() {
-        signOut()
+    async function handleLogOut() {
+        setLogOutLoading(true)
+        await signOut()
+        setLogOutLoading(false)
         router.push('https://chat-app-two-ochre-87.vercel.app/auth/signin')
         toast.success("Logged out successfully!")
     }
@@ -27,7 +32,9 @@ export default function LogOutModal({setLogOutModal}: Props) {
                 </div>
                 <div className="flex pb-3 justify-end items-center gap-x-4">
                     <button onClick={() => setLogOutModal(false)} className="hover:bg-[#999] text-white cursor-pointer px-3 py-1 rounded-lg">Cancel</button>
-                    <button onClick={handleLogOut} className="hover:bg-red-100 px-3 py-1 cursor-pointer rounded-lg text-red-500">Logout</button>
+                    <button disabled={logOutLoading} onClick={handleLogOut} className={`hover:bg-red-100 px-3 py-1 cursor-pointer rounded-lg text-red-500 ${logOutLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                        {logOutLoading ? "Logging out..." : "Logout"}
+                    </button>
                 </div>
             </div>
         </div>

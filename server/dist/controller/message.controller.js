@@ -82,8 +82,31 @@ export const getFriends = async (req, res) => {
                 imageUrl: true
             },
         });
+        const latestMessages = await Promise.all(users.map(async (user) => {
+            const latestMessage = await prisma.message.findFirst({
+                where: {
+                    OR: [
+                        { senderId: userId, receiverId: user.id },
+                        { senderId: user.id, receiverId: userId },
+                    ],
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+                select: {
+                    content: true,
+                    receiverId: true,
+                    senderId: true,
+                    createdAt: true,
+                },
+            });
+            return {
+                ...user,
+                latestMessage: latestMessage || null,
+            };
+        }));
         return res.status(200).json({
-            users,
+            users: latestMessages,
         });
     }
     catch (error) {
