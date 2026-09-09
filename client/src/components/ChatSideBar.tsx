@@ -43,8 +43,8 @@ export default function ChatSideBar() {
 
   return (
     <div className="h-full min-h-0 bg-[#161b22] rounded-xl flex flex-col">
-      <div className="border-b border-[#555] p-5 shrink-0">
-        <h3>Messages</h3>
+      <div className="border-b border-[#555] px-5 py-6 shrink-0">
+        <h3 className="text-xl font-semibold">Messages</h3>
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto">

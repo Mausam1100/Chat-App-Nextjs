@@ -40,7 +40,7 @@ export default function UserSideBar({
           selectedUser?.id === id ? "bg-[#111]" : ""
         }`}
       >
-        <div className="w-9 h-9">
+        <div className="w-9 h-9 shrink-0">
           {imageUrl ? (
             <Image
               className="rounded-full aspect-square object-cover"
@@ -53,10 +53,10 @@ export default function UserSideBar({
             <DefaultProfilePic id={id} fullName={fullName} size="verySmall" />
           )}
         </div>
-        <div className="pl-4 w-full">
+        <div className="pl-4 w-full min-w-0 flex-1">
           <h4 className="text-sm">{fullName}</h4>
           <div className="flex items-center gap-x-2 justify-between w-full">
-            <p className="text-xs font-extralight">
+            <p className="text-xs truncate font-extralight">
               {latestMessage?.content ? latestMessage.content : "No messages yet"}
             </p>
             <div

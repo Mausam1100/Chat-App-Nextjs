@@ -97,7 +97,6 @@ export const getFriends = async (req, res) => {
                     content: true,
                     receiverId: true,
                     senderId: true,
-                    createdAt: true,
                 },
             });
             return {
