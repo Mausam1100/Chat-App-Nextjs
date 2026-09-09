@@ -79,7 +79,7 @@ export const getFriends = async (req, res) => {
                 id: true,
                 fullName: true,
                 email: true,
-                imageUrl: true
+                imageUrl: true,
             },
         });
         const latestMessages = await Promise.all(users.map(async (user) => {
@@ -97,7 +97,13 @@ export const getFriends = async (req, res) => {
                     content: true,
                     receiverId: true,
                     senderId: true,
+                    createdAt: true,
                 },
+            });
+            latestMessages.sort((a, b) => {
+                const dateA = a.latestMessage?.createdAt?.getTime() ?? 0;
+                const dateB = b.latestMessage?.createdAt?.getTime() ?? 0;
+                return dateB - dateA;
             });
             return {
                 ...user,
@@ -125,12 +131,12 @@ export const deleteChat = async (req, res) => {
             where: {
                 OR: [
                     { senderId: userId, receiverId: otherUserId },
-                    { senderId: otherUserId, receiverId: userId }
-                ]
-            }
+                    { senderId: otherUserId, receiverId: userId },
+                ],
+            },
         });
         res.status(200).json({
-            msg: "Chate deleted successfully"
+            msg: "Chate deleted successfully",
         });
     }
     catch (error) {

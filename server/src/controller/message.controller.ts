@@ -119,19 +119,18 @@ export const getFriends = async (req: Request, res: Response) => {
             createdAt: true,
           },
         });
-
-        latestMessages.sort((a, b) => {
-          const dateA = a.latestMessage?.createdAt?.getTime() ?? 0;
-          const dateB = b.latestMessage?.createdAt?.getTime() ?? 0;
-          return dateB - dateA;
-        });
-        
         return {
           ...user,
           latestMessage: latestMessage || null,
         };
       }),
     );
+
+    latestMessages.sort((a, b) => {
+      const dateA = a.latestMessage?.createdAt?.getTime() ?? 0;
+      const dateB = b.latestMessage?.createdAt?.getTime() ?? 0;
+      return dateB - dateA;
+    });
 
     return res.status(200).json({
       users: latestMessages,
