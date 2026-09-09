@@ -96,7 +96,7 @@ export const getFriends = async (req: Request, res: Response) => {
         id: true,
         fullName: true,
         email: true,
-        imageUrl: true
+        imageUrl: true,
       },
     });
 
@@ -116,13 +116,21 @@ export const getFriends = async (req: Request, res: Response) => {
             content: true,
             receiverId: true,
             senderId: true,
+            createdAt: true,
           },
         });
+
+        latestMessages.sort((a, b) => {
+          const dateA = a.latestMessage?.createdAt?.getTime() ?? 0;
+          const dateB = b.latestMessage?.createdAt?.getTime() ?? 0;
+          return dateB - dateA;
+        });
+        
         return {
           ...user,
           latestMessage: latestMessage || null,
-        }
-      })
+        };
+      }),
     );
 
     return res.status(200).json({
@@ -145,17 +153,17 @@ export const deleteChat = async (req: Request, res: Response) => {
     }
 
     await prisma.message.deleteMany({
-        where: {
-            OR: [
-                {senderId: userId, receiverId: otherUserId},
-                {senderId: otherUserId, receiverId: userId}
-            ]
-        }
-    })
+      where: {
+        OR: [
+          { senderId: userId, receiverId: otherUserId },
+          { senderId: otherUserId, receiverId: userId },
+        ],
+      },
+    });
 
     res.status(200).json({
-        msg: "Chate deleted successfully"
-    })
+      msg: "Chate deleted successfully",
+    });
   } catch (error) {
     console.log(`Error in deleteChat function: ${error}`);
   }

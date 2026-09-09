@@ -127,7 +127,7 @@ export function ChatBox() {
     };
 
     fetchMessages();
-  }, [selectedUser?.id, session?.user.id, session?.accessToken, setMessages]);
+  }, [selectedUser?.id, session?.user.id, session?.accessToken, setMessages, clearUnread]);
   return (
     <>
       {showDeleteChat && <DeleteModal setShowDeleteChat={setShowDeleteChat} />}
