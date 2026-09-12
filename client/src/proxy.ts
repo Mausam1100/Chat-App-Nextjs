@@ -13,6 +13,8 @@ export async function proxy(request: NextRequest) {
   const publicRoutes = [
     "/auth/signin",
     "/auth/signup",
+    '/',
+    '/profile'
   ];
 
   const isPublicRoute = publicRoutes.includes(pathname);

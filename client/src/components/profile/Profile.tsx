@@ -17,7 +17,7 @@ export default function Profile({ fullName, email, imageUrl, id }: PropsType) {
   return (
     <>
       {showEditProfile && <EditProfileModal imageUrl={imageUrl ?? null} setShowEditProfile={setShowEditProfile} />}
-      <div className="h-full min-h-0 bg-[#161b22] gap-y-4 py-6 rounded-xl flex-col flex justify-center items-center">
+      <div className="h-full min-h-0 bg-[#161b22] gap-y-4 py-5 rounded-xl flex-col flex justify-center items-center">
         <div className="sm:h-52 sm:w-52 h-30 w-30">
           {imageUrl ? (
             <Image
@@ -31,14 +31,15 @@ export default function Profile({ fullName, email, imageUrl, id }: PropsType) {
             <DefaultProfilePic size="large" id={id!} fullName={fullName} />
           )}
         </div>
-        <div className="text-center border-b py-3">
-          <h2 className="text-2xl font-semibold">{fullName}</h2>
+        <div className="text-center border-b sm:py-3">
+          <h2 className="text-xl sm:text-2xl font-semibold">{fullName}</h2>
           <p className="text-xs pt-1">{email}</p>
         </div>
         <div>
-          <button onClick={() => setShowEditProfile(true)} className="flex items-center justify-center gap-x-3 px-8 cursor-pointer py-3 border rounded-xl border-[#555]">
-            <SquarePen />
-            Edit Profile
+          <button onClick={() => setShowEditProfile(true)} className="flex items-center justify-center gap-x-2.5 sm:gap-x-3 sm:px-8 px-4 cursor-pointer py-2 sm:py-3 border rounded-lg sm:rounded-xl border-[#555]">
+            <SquarePen className="hidden sm:block"  />
+            <SquarePen size={20} className="sm:hidden"  />
+            <span className="sm:text-base text-sm">Edit Profile</span>
           </button>
         </div>
       </div>

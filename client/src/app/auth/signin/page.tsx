@@ -37,8 +37,8 @@ export default function SignIn() {
   }
   return (
     <>
-      <div className="bg-[#161b22] text-white h-screen w-screen flex justify-center items-center">
-        <div className="bg-[#0d1117] py-5 w-[92vw] sm:w-auto rounded-xl px-9 min-w-96">
+      <div className="bg-[#161b22] text-white h-dvh w-screen flex justify-center items-center">
+        <div className="bg-[#0d1117] py-5 w-[92vw] sm:w-auto rounded-xl px-9 sm:min-w-96">
           <div>
             <h1 className="pb-1 font-semibold text-2xl sm:text-3xl sm:font-bold">Welcome Back!</h1>
             <p>Login with email</p>
@@ -59,7 +59,7 @@ export default function SignIn() {
                 id="email"
                 type="text"
                 placeholder="example@gmail.com"
-                className="border outline-none border-[#555] px-3 py-1.5 rounded-lg"
+                className="border text-sm sm:text-base outline-none border-[#555] px-3 py-2 sm:py-1.5 rounded-lg"
               />
             </div>
 
@@ -79,9 +79,10 @@ export default function SignIn() {
                   id="password"
                   type={seePassword ? "text" : "password"}
                   placeholder="Password"
-                  className="border pr-9 border-[#555] outline-none w-full px-3 py-1.5 rounded-lg"
+                  className="border text-sm sm:text-base pr-9 border-[#555] outline-none w-full px-3 py-2 sm:py-1.5 rounded-lg"
                 />
                 <button
+                  type="button"
                   onClick={() => setSeePassword(!seePassword)}
                   className="cursor-pointer"
                 >
@@ -108,7 +109,7 @@ export default function SignIn() {
             <button
               disabled={authLoading}
               onClick={handleLogin}
-              className={`mb-4 text-center px-6 mt-2 w-full py-3 rounded-lg ${authLoading ? "opacity-50 bg-[#555] cursor-not-allowed" : "hover:bg-[#444] bg-[#555] cursor-pointer "}`}
+              className={`mb-4 text-center px-6 mt-2 w-full py-2.5 sm:py-3 rounded-lg ${authLoading ? "opacity-50 bg-[#555] cursor-not-allowed" : "hover:bg-[#444] bg-[#555] cursor-pointer "}`}
             >
               {authLoading ? "Signing in..." : "Sign In"}
             </button>
@@ -116,7 +117,7 @@ export default function SignIn() {
 
           <div className="grid grid-cols-[1fr_auto_1fr] items-center">
             <hr className="border-[#555] border-t" />
-            <p className="text-center text-lg px-3">or</p>
+            <p className="text-center text-sm sm:text-lg px-3">or</p>
             <hr className="border-[#555] border-t" />
           </div>
 
@@ -127,7 +128,7 @@ export default function SignIn() {
                   callbackUrl: "https://chat-app-two-ochre-87.vercel.app",
                 })
               }
-              className="bg-white cursor-pointer relative flex items-center justify-center text-black mb-4 text-center px-6 mt-2 w-full py-4 rounded-lg"
+              className="bg-white cursor-pointer relative flex items-center justify-center text-black mb-4 text-center px-6 mt-2 w-full py-2.5 sm:py-4 rounded-lg"
             >
               <Image
                 className="absolute left-3"
@@ -139,7 +140,7 @@ export default function SignIn() {
               <h4 className="font-medium">Sign in with Google</h4>
             </button>
           </div>
-          <p className="text-center pb-2">
+          <p className="text-center text-xs sm:text-sm pb-2">
             Don&apos;t have a account?{" "}
             <span className="font-medium underline cursor-pointer">
               <Link href="/auth/signup">Register Now</Link>

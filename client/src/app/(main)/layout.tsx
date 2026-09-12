@@ -247,7 +247,6 @@ export default function MainLayout({
               className="sm:hidden bg-[#555] cursor-pointer rounded-full p-1.5 aspect-square flex items-center justify-center"
             >
               <Search
-                className="-translate-x-0.5"
                 strokeWidth={2.5}
                 size={25}
               />
