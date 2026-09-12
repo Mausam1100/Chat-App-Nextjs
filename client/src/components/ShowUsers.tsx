@@ -1,4 +1,4 @@
-import { useSearchUser, useSelectedUser } from "@/store/searchUsers";
+import { useSearchUser, useSelectedUser, useShowChatBoxStore } from "@/store/searchUsers";
 import ShowUsersSearch from "./ShowUsersSearch"
 
 interface User {
@@ -10,17 +10,21 @@ interface User {
 
 interface Props {
     setSearch: React.Dispatch<React.SetStateAction<string>>;
+    setShowInput?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ShowUsers({setSearch}: Props) {
+export default function ShowUsers({setSearch, setShowInput}: Props) {
     const searchUsers = useSearchUser((state) => state.searchUsers)
     const setSearchUsers = useSearchUser((state) => state.setSearchUsers)
     const setSelectedUser = useSelectedUser((state) => state.setSelectedUser)
+    const setShowChatBox = useShowChatBoxStore((state) => state.setShowChatBox)
 
     function handleClick(user: User) {
+        setShowChatBox(true)
         setSearch('')
         setSelectedUser(user)
         setSearchUsers([])
+        setShowInput && setShowInput(false)
     }
     return (
         <>

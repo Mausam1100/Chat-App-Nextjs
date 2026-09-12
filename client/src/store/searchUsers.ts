@@ -148,3 +148,7 @@ export const useUnreadCountStore = create<UnreadCountStore>((set) => ({
     })),
 }));
 
+export const useShowChatBoxStore = create<{ showChatBox: boolean; setShowChatBox: (show: boolean) => void }>((set) => ({
+  showChatBox: false,
+  setShowChatBox: (show) => set({ showChatBox: show }),
+}));

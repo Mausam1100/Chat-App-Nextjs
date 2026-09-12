@@ -38,15 +38,15 @@ export default function SignIn() {
   return (
     <>
       <div className="bg-[#161b22] text-white h-screen w-screen flex justify-center items-center">
-        <div className="bg-[#0d1117] py-5 rounded-xl px-9 min-w-96">
+        <div className="bg-[#0d1117] py-5 w-[92vw] sm:w-auto rounded-xl px-9 min-w-96">
           <div>
-            <h1 className="pb-1">Welcome Back!</h1>
+            <h1 className="pb-1 font-semibold text-2xl sm:text-3xl sm:font-bold">Welcome Back!</h1>
             <p>Login with email</p>
           </div>
 
           <div className="pt-5">
             <div className="flex flex-col pb-2">
-              <label htmlFor="email" className="font-medium pb-1">
+              <label htmlFor="email" className="font-medium pb-1 text-sm sm:text-base ">
                 Email
               </label>
               <input
@@ -64,7 +64,7 @@ export default function SignIn() {
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="password" className="font-medium pb-1">
+              <label htmlFor="password" className="font-medium pb-1 text-sm sm:text-base">
                 Password
               </label>
               <div className="relative w-full">

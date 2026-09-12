@@ -1,5 +1,5 @@
 "use client";
-import { useChatUsers, useSelectedUser, useUnreadCountStore } from "@/store/searchUsers";
+import { useChatUsers, useSelectedUser, useShowChatBoxStore, useUnreadCountStore } from "@/store/searchUsers";
 import Image from "next/image";
 import DefaultProfilePic from "./DefaultProfilePic";
 
@@ -27,9 +27,11 @@ export default function UserSideBar({
   const unreadCounts = useUnreadCountStore((state) => state.unreadCounts);
   const selectedUser = useSelectedUser((state) => state.selectedUser);
   const setSelectedUser = useSelectedUser((state) => state.setSelectedUser);
+  const setShowChatBox = useShowChatBoxStore((state) => state.setShowChatBox);
   const users = useChatUsers((state) => state.users);
   console.log("users in sidebar", users);
   function handleClick() {
+    setShowChatBox(true);
     setSelectedUser({ id, fullName, email, imageUrl })
   }
   return (

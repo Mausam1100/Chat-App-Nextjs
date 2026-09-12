@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDown, Search } from "lucide-react";
+import { ArrowLeft, ChevronDown, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
@@ -36,8 +36,10 @@ export default function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const searchRef = useRef<HTMLDivElement | null>(null);
+  const [showInput, setShowInput] = useState(false);
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [logOutModal, setLogOutModal] = useState(false);
@@ -61,6 +63,21 @@ export default function MainLayout({
 
   function handleClick() {
     setMenuModal(!menuModal);
+  }
+
+  function handleArrowClick() {
+    setShowInput(false);
+    setSearch("");
+  }
+
+  useEffect(() => {
+    if (showInput) {
+      inputRef.current?.focus();
+    }
+  }, [showInput]);
+
+  function handleOnClick() {
+    setShowInput(true);
   }
 
   function handleIncomingMessage(data: MessageType) {
@@ -195,7 +212,9 @@ export default function MainLayout({
     <>
       {logOutModal && <LogOutModal setLogOutModal={setLogOutModal} />}
       <div className="flex flex-col h-screen bg-[#161b22]">
-        <div className="bg-[#161b22] max-w-[1600px] mx-auto w-full text-white flex items-center justify-between px-8 py-4">
+        <div
+          className={`bg-[#161b22] ${showInput && "hidden"} max-w-[1600px] mx-auto w-full text-white flex items-center justify-between px-8 sm:py-4 py-3`}
+        >
           <h4
             onClick={() => router.push("/")}
             className="text-lg cursor-pointer font-medium"
@@ -204,7 +223,7 @@ export default function MainLayout({
           </h4>
 
           <div className="flex gap-x-5 items-center">
-            <div ref={searchRef} className="flex relative">
+            <div ref={searchRef} className="sm:flex hidden relative">
               <input
                 value={search}
                 onChange={(e) => handleSearch(e.target.value)}
@@ -222,6 +241,16 @@ export default function MainLayout({
               <div className="absolute z-30 right-1 w-full top-11">
                 {searchUsers.length > 0 && <ShowUsers setSearch={setSearch} />}
               </div>
+            </div>
+            <div
+              onClick={handleOnClick}
+              className="sm:hidden bg-[#555] cursor-pointer rounded-full p-1.5 aspect-square flex items-center justify-center"
+            >
+              <Search
+                className="-translate-x-0.5"
+                strokeWidth={2.5}
+                size={25}
+              />
             </div>
             <div
               onClick={handleClick}
@@ -262,6 +291,27 @@ export default function MainLayout({
                 </div>
               )}
             </div>
+          </div>
+        </div>
+
+        <div
+          className={`bg-[#161b22] relative ${!showInput && "hidden"} max-w-[1600px] mx-auto w-full text-white flex items-center justify-between px-4 sm:py-4 py-3`}
+        >
+          <button className="cursor-pointer pr-3" onClick={handleArrowClick}>
+            <ArrowLeft />
+          </button>
+          <input
+            ref={inputRef}
+            value={search}
+            onChange={(e) => handleSearch(e.target.value)}
+            type="text"
+            placeholder="Search..."
+            className="border outline-none border-[#555] w-full rounded-3xl px-5 py-1.5"
+          />
+          <div className="absolute z-30 right-3 w-[95%] top-18">
+            {searchUsers.length > 0 && (
+              <ShowUsers setShowInput={setShowInput} setSearch={setSearch} />
+            )}
           </div>
         </div>
         <div className="flex-1 min-h-0">{children}</div>

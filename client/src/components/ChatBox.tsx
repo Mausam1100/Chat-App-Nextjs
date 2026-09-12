@@ -1,5 +1,6 @@
 "use client";
 import {
+  ArrowLeft,
   EllipsisVertical,
   FaceSlightlySmiling,
   Phone,
@@ -12,6 +13,7 @@ import {
   useChatUsers,
   useMessageStore,
   useSelectedUser,
+  useShowChatBoxStore,
   useUnreadCountStore,
 } from "@/store/searchUsers";
 import { useEffect, useRef, useState } from "react";
@@ -39,6 +41,7 @@ export function ChatBox() {
   const clearUnread = useUnreadCountStore((state) => state.clearUnread);
   const { data: session } = useSession();
   const updateLatestMessage = useChatUsers((state) => state.updateLatestMessage);
+  const setShowChatBox = useShowChatBoxStore((state) => state.setShowChatBox);
 
   function handleSendMessage() {
     if (!msg.trim()) return;
@@ -131,9 +134,12 @@ export function ChatBox() {
   return (
     <>
       {showDeleteChat && <DeleteModal setShowDeleteChat={setShowDeleteChat} />}
-      <div className="bg-[#161b22] overflow-y-auto flex-1 rounded-xl h-full flex flex-col justify-between">
+      <div className={`bg-[#161b22] w-full overflow-hidden sm:overflow-y-auto flex-1 rounded-xl h-full flex flex-col justify-between`}>
         <div className="border-b bg-[#161b22] sticky top-0 border-[#555] px-6 py-4 flex items-center justify-between">
           <div className="flex items-center">
+            <button className="cursor-pointer pr-3" onClick={() => setShowChatBox(false)}>
+              <ArrowLeft />
+            </button>
             <div className="w-11 h-11">
               {selectedUser?.imageUrl ? (
                 <Image
@@ -152,8 +158,8 @@ export function ChatBox() {
               )}
             </div>
             <div className="px-4">
-              <h3 className="font-medium">{selectedUser?.fullName}</h3>
-              <p className="text-xs">{selectedUser?.email}</p>
+              <h3 className="text-sm sm:font-medium">{selectedUser?.fullName}</h3>
+              <p className="sm:text-xs hidden sm:block">{selectedUser?.email}</p>
             </div>
           </div>
 

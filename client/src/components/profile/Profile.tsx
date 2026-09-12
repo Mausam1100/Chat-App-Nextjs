@@ -17,7 +17,7 @@ export default function Profile({ fullName, email, imageUrl, id }: PropsType) {
   return (
     <>
       {showEditProfile && <EditProfileModal imageUrl={imageUrl ?? null} setShowEditProfile={setShowEditProfile} />}
-      <div className="h-full min-h-0 bg-[#161b22] gap-y-4 rounded-xl flex-col flex justify-center items-center">
+      <div className="h-full min-h-0 bg-[#161b22] gap-y-4 py-11 rounded-xl flex-col flex justify-center items-center">
         <div className="h-52 w-52">
           {imageUrl ? (
             <Image

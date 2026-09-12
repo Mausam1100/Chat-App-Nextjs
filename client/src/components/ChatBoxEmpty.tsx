@@ -4,7 +4,7 @@ import Logo from '../../public/icons8-message-100 (1).png'
 export default function ChatBoxEmpty() {
     return (
         <>
-            <div className="h-full bg-[#161b22] rounded-xl flex items-center justify-center flex-col">
+            <div className="h-full hidden sm:flex bg-[#161b22] rounded-xl items-center justify-center flex-col">
                 <div>
                     <Image width={200} height={200} color="white" src={Logo} alt="logo"  />
                 </div>

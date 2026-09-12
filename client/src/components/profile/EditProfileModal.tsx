@@ -77,7 +77,7 @@ export default function EditProfileModal({ setShowEditProfile }: PropsType) {
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="bg-[#161b22] rounded-xl py-7 px-8 border border-[#32373e]"
+          className="bg-[#161b22] w-95 sm:w-auto rounded-xl py-7 px-8 border border-[#32373e]"
         >
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-semibold">Edit Profile</h3>
@@ -90,10 +90,10 @@ export default function EditProfileModal({ setShowEditProfile }: PropsType) {
           </div>
           <p className="text-xs pt-0.5">Update your profile information</p>
 
-          <div className="grid grid-cols-5 py-9 border-b border-[#555] gap-x-10">
+          <div className="sm:grid grid-cols-5 py-9 border-b border-[#555] gap-x-10">
             <div className="col-span-2">
               <h3 className="font-medium pb-4 text-sm">Profile Picture</h3>
-              <div className="flex flex-col items-center gap-y-6">
+              <div className="flex flex-col items-center gap-y-6 pb-5 sm:pb-0">
                 <div className="rounded-full w-40 h-40 border-2 border-[#555] p-1.5">
                   {preview ? (
                     /* eslint-disable-next-line @next/next/no-img-element */
@@ -123,7 +123,7 @@ export default function EditProfileModal({ setShowEditProfile }: PropsType) {
                   className="flex hover:bg-[#222] items-center border border-[#555] rounded-lg px-4 py-2.5 gap-x-3 cursor-pointer"
                 >
                   <Upload size={17} />
-                  <h4 className="font-medium text-xs">Change Photo</h4>
+                  <h4 className="font-medium text-xs whitespace-nowrap">Change Photo</h4>
                 </button>
                 <input
                   onChange={handleFileChange}

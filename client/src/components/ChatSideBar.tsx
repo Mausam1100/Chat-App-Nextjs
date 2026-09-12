@@ -42,7 +42,7 @@ export default function ChatSideBar() {
   }, [session?.user?.id, setUsers, session?.accessToken]);
 
   return (
-    <div className="h-full min-h-0 bg-[#161b22] rounded-xl flex flex-col">
+    <div className={`h-full w-full min-h-0 bg-[#161b22] rounded-xl flex flex-col`}>
       <div className="border-b border-[#555] px-5 py-6 shrink-0">
         <h3 className="text-xl font-semibold">Messages</h3>
       </div>
