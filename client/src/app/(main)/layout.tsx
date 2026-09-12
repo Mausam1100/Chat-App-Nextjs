@@ -222,7 +222,7 @@ export default function MainLayout({
             &lt;chat-app/&gt;
           </h4>
 
-          <div className="flex gap-x-5 items-center">
+          <div className="flex sm:gap-x-5 gap-x-3 items-center">
             <div ref={searchRef} className="sm:flex hidden relative">
               <input
                 value={search}

@@ -235,7 +235,7 @@ export function ChatBox() {
               onChange={(e) => setMsg(e.target.value)}
               type="text"
               placeholder="Type a message here..."
-              className="w-full sm:text-base text-sm rounded-3xl bg-[#555] pl-7 pr-11 sm:pr-13 outline-none py-2"
+              className="w-full sm:text-base text-sm rounded-3xl bg-[#555] pl-4 sm:pl-7 pr-11 sm:pr-13 outline-none py-2"
             />
           </div>
 
