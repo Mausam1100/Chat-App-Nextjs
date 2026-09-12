@@ -213,11 +213,11 @@ export default function MainLayout({
       {logOutModal && <LogOutModal setLogOutModal={setLogOutModal} />}
       <div className="flex flex-col h-screen bg-[#161b22]">
         <div
-          className={`bg-[#161b22] ${showInput && "hidden"} max-w-[1600px] mx-auto w-full text-white flex items-center justify-between px-8 sm:py-4 py-3`}
+          className={`bg-[#161b22] ${showInput && "hidden"} max-w-[1600px] mx-auto w-full text-white flex items-center justify-between px-4 sm:px-8 sm:py-4 py-3`}
         >
           <h4
             onClick={() => router.push("/")}
-            className="text-lg cursor-pointer font-medium"
+            className="sm:text-lg text-base cursor-pointer font-medium"
           >
             &lt;chat-app/&gt;
           </h4>
@@ -247,13 +247,13 @@ export default function MainLayout({
               className="sm:hidden bg-[#555] cursor-pointer rounded-full p-1.5 aspect-square flex items-center justify-center"
             >
               <Search
-                strokeWidth={2.5}
-                size={25}
+                strokeWidth={2}
+                size={22}
               />
             </div>
             <div
               onClick={handleClick}
-              className="group w-9 relative h-9 cursor-pointer z-40 rounded-full"
+              className="group w-8 sm:w-9 relative h-8 sm:h-9 cursor-pointer z-40 rounded-full"
             >
               {session?.user?.image ? (
                 <Image
@@ -294,10 +294,10 @@ export default function MainLayout({
         </div>
 
         <div
-          className={`bg-[#161b22] relative ${!showInput && "hidden"} max-w-[1600px] mx-auto w-full text-white flex items-center justify-between px-4 sm:py-4 py-3`}
+          className={`bg-[#161b22] relative ${!showInput && "hidden"} max-w-[1600px] mx-auto w-full text-white flex items-center justify-between px-3 sm:py-4 py-3`}
         >
-          <button className="cursor-pointer pr-3" onClick={handleArrowClick}>
-            <ArrowLeft />
+          <button className="cursor-pointer pr-2" onClick={handleArrowClick}>
+            <ArrowLeft size={20} />
           </button>
           <input
             ref={inputRef}
@@ -305,7 +305,7 @@ export default function MainLayout({
             onChange={(e) => handleSearch(e.target.value)}
             type="text"
             placeholder="Search..."
-            className="border outline-none border-[#555] w-full rounded-3xl px-5 py-1.5"
+            className="border text-sm outline-none border-[#555] w-full rounded-3xl px-5 py-1.5"
           />
           <div className="absolute z-30 right-3 w-[95%] top-18">
             {searchUsers.length > 0 && (

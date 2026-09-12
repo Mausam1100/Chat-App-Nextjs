@@ -19,7 +19,7 @@ export default function MenuModal({setLogOutModal, setMenuModal, fullName, id, i
     }
     return (
         <>
-        <div className="bg-[#444] min-w-62.5 whitespace-nowrap rounded-lg p-4 w-fit">
+        <div className="bg-[#444] min-w-50 sm:min-w-62.5 whitespace-nowrap rounded-lg p-2.5 sm:p-4 w-fit">
             <div className="bg-[#444] rounded-lg border border-[#777] px-3 py-2">
                 <div className="flex items-center gap-x-3 border-b border-[#777] pb-3">
                     <div className="h-8 w-8 rounded-full">

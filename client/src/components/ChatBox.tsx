@@ -135,12 +135,12 @@ export function ChatBox() {
     <>
       {showDeleteChat && <DeleteModal setShowDeleteChat={setShowDeleteChat} />}
       <div className={`bg-[#161b22] w-full overflow-y-auto flex-1 rounded-xl h-full flex flex-col justify-between`}>
-        <div className="border-b bg-[#161b22] sticky top-0 border-[#555] px-6 py-4 flex items-center justify-between">
+        <div className="border-b bg-[#161b22] sticky top-0 border-[#555] px-2 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center">
             <button className="cursor-pointer pr-3" onClick={() => setShowChatBox(false)}>
-              <ArrowLeft />
+              <ArrowLeft size={20} />
             </button>
-            <div className="w-11 h-11">
+            <div className="sm:w-11 sm:h-11 w-8 h-8">
               {selectedUser?.imageUrl ? (
                 <Image
                   src={selectedUser.imageUrl}
@@ -166,11 +166,11 @@ export function ChatBox() {
           <div className="flex relative  items-center gap-x-4">
             <Video
               size={30}
-              className="cursor-pointer fill-[#777] hover:fill-white transition-colors"
+              className="hidden sm:block cursor-pointer fill-[#777] hover:fill-white transition-colors"
               strokeWidth={0}
             />
             <Phone
-              className="cursor-pointer fill-[#777] hover:fill-white transition-colors"
+              className="hidden sm:block cursor-pointer fill-[#777] hover:fill-white transition-colors"
               strokeWidth={0}
             />
             <button
@@ -203,7 +203,7 @@ export function ChatBox() {
           </div>
         </div>
 
-        <div className="px-5 py-3 bg-[#161b22] sticky bottom-0 flex items-center gap-x-4 justify-between">
+        <div className="sm:px-5 px-2 py-3 bg-[#161b22] sticky bottom-0 flex items-center gap-x-2 sm:gap-x-4 justify-between">
           <div className="relative flex-1">
             <button
               type="button"
@@ -235,15 +235,20 @@ export function ChatBox() {
               onChange={(e) => setMsg(e.target.value)}
               type="text"
               placeholder="Type a message here..."
-              className="w-full rounded-3xl bg-[#555] pl-7 pr-13 outline-none py-2"
+              className="w-full sm:text-base text-sm rounded-3xl bg-[#555] pl-7 pr-11 sm:pr-13 outline-none py-2"
             />
           </div>
 
           <div className="p-2 bg-blue-500 rounded-full flex justify-center items-center">
             <button onClick={handleSendMessage} className="cursor-pointer">
               <Send
-                className="-translate-x-0.5 translate-y-0.5"
+                className="hidden sm: bloxk -translate-x-0.5 translate-y-0.5"
                 strokeWidth={1.5}
+              />
+              <Send
+                className="block sm:hidden -translate-x-0.5 translate-y-0.5"
+                strokeWidth={1.5}
+                size={18}
               />
             </button>
           </div>

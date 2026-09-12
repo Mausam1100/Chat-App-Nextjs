@@ -77,7 +77,7 @@ export default function EditProfileModal({ setShowEditProfile }: PropsType) {
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="bg-[#161b22] w-95 sm:w-auto rounded-xl py-7 px-8 border border-[#32373e]"
+          className="bg-[#161b22] w-80 sm:w-auto rounded-xl py-4 sm:py-7 px-6 sm:px-8 border border-[#32373e]"
         >
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-semibold">Edit Profile</h3>
@@ -90,10 +90,10 @@ export default function EditProfileModal({ setShowEditProfile }: PropsType) {
           </div>
           <p className="text-xs pt-0.5">Update your profile information</p>
 
-          <div className="sm:grid grid-cols-5 py-9 border-b border-[#555] gap-x-10">
+          <div className="sm:grid grid-cols-5 sm:py-9 py-3 border-b border-[#555] gap-x-10">
             <div className="col-span-2">
               <h3 className="font-medium pb-4 text-sm">Profile Picture</h3>
-              <div className="flex flex-col items-center gap-y-6 pb-5 sm:pb-0">
+              <div className="flex flex-col items-center gap-y-4 sm:gap-y-6 pb-5 sm:pb-0">
                 <div className="rounded-full w-40 h-40 border-2 border-[#555] p-1.5">
                   {preview ? (
                     /* eslint-disable-next-line @next/next/no-img-element */
@@ -169,7 +169,7 @@ export default function EditProfileModal({ setShowEditProfile }: PropsType) {
             </div>
           </div>
 
-          <div className="mt-7">
+          <div className="sm:mt-7 mt-4">
             <div className="flex justify-end items-center gap-x-3">
               <button
                 onClick={() => setShowEditProfile(false)}
