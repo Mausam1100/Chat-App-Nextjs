@@ -134,7 +134,7 @@ export function ChatBox() {
   return (
     <>
       {showDeleteChat && <DeleteModal setShowDeleteChat={setShowDeleteChat} />}
-      <div className={`bg-[#161b22] w-full overflow-hidden sm:overflow-y-auto flex-1 rounded-xl h-full flex flex-col justify-between`}>
+      <div className={`bg-[#161b22] w-full overflow-y-auto flex-1 rounded-xl h-full flex flex-col justify-between`}>
         <div className="border-b bg-[#161b22] sticky top-0 border-[#555] px-6 py-4 flex items-center justify-between">
           <div className="flex items-center">
             <button className="cursor-pointer pr-3" onClick={() => setShowChatBox(false)}>

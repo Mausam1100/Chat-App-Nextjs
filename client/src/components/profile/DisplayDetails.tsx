@@ -30,7 +30,7 @@ export default function DisplayDetails({fullName, email, createdAt}: PropsType) 
               </div>
               <div>
                 <h3 className="text font-medium">Email Address</h3>
-                <p>{email}</p>
+                <p className="break-all">{email}</p>
               </div>
             </div>
 
