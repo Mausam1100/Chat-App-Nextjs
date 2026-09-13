@@ -242,7 +242,7 @@ export function ChatBox() {
           <div className="p-2 bg-blue-500 rounded-full flex justify-center items-center">
             <button onClick={handleSendMessage} className="cursor-pointer">
               <Send
-                className="hidden sm: bloxk -translate-x-0.5 translate-y-0.5"
+                className="hidden sm:block -translate-x-0.5 translate-y-0.5"
                 strokeWidth={1.5}
               />
               <Send
