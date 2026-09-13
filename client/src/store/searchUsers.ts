@@ -47,6 +47,7 @@ type SearchUser = {
 type SelectedUser = {
   selectedUser: User | null;
   setSelectedUser: (user: User | null) => void;
+  clearSelectedUser: () => void;
 };
 
 interface ChatUserStore {
@@ -68,6 +69,7 @@ export const useSearchUser = create<SearchUser>((set) => ({
 export const useSelectedUser = create<SelectedUser>((set) => ({
   selectedUser: null,
   setSelectedUser: (user) => set({ selectedUser: user }),
+  clearSelectedUser: () => set({ selectedUser: null }),
 }));
 
 export const useChatUsers = create<ChatUserStore>((set) => ({

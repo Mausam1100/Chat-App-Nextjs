@@ -41,7 +41,13 @@ export function ChatBox() {
   const clearUnread = useUnreadCountStore((state) => state.clearUnread);
   const { data: session } = useSession();
   const updateLatestMessage = useChatUsers((state) => state.updateLatestMessage);
+  const clearSelectedUser = useSelectedUser((state) => state.clearSelectedUser);
   const setShowChatBox = useShowChatBoxStore((state) => state.setShowChatBox);
+
+  function handleCloseChatBox() {
+    setShowChatBox(false);
+    clearSelectedUser();
+  }
 
   function handleSendMessage() {
     if (!msg.trim()) return;
@@ -137,7 +143,7 @@ export function ChatBox() {
       <div className={`bg-[#161b22] w-full overflow-y-auto flex-1 rounded-xl h-full flex flex-col justify-between`}>
         <div className="border-b bg-[#161b22] sticky top-0 border-[#555] px-2 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center">
-            <button className="cursor-pointer pr-3" onClick={() => setShowChatBox(false)}>
+            <button className="cursor-pointer pr-3" onClick={handleCloseChatBox}>
               <ArrowLeft size={20} />
             </button>
             <div className="sm:w-11 sm:h-11 w-8 h-8">
