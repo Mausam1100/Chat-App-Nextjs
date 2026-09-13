@@ -5,7 +5,6 @@ interface Message {
 
 export default function MessageBox({msg, sender}: Message) {
     const isLink = /^https?:\/\/[^\s]+$/.test(msg);
-    console.log(isLink)
     return (
         <>
             <div className={`text-white mb-2 flex ${sender=="me"? "justify-end": "justify-start"}`}>

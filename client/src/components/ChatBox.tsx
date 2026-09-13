@@ -159,7 +159,6 @@ export function ChatBox() {
             </div>
             <div className="px-4">
               <h3 className="text-sm sm:font-medium">{selectedUser?.fullName}</h3>
-              <p className="sm:text-xs hidden sm:block">{selectedUser?.email}</p>
             </div>
           </div>
 
